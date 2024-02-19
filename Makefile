@@ -5,10 +5,10 @@ init:
 	source ~/.bashrc
 
 build:
-	docker-compose build
+	docker compose build
 
 start:
-	docker-compose up
+	docker compose up
 
 stop:
-	docker-compose down
+	docker compose down
