@@ -1,0 +1,3 @@
+BackEnd/backend/myenv
+BackEnd/backend/*/__pycache__/*
+BackEnd/backend/db.sqlite3
