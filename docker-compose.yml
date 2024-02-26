@@ -16,6 +16,17 @@ services:
       olok-net-backend:
         ipv4_address: 10.0.1.3
 
+  db-nosql:
+    restart: always
+    container_name: db
+    env_file:
+      - ./db.env 
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    networks:
+      olok-net-backend:
+        ipv4_address: 10.0.1.4
 
 networks:
   olok-net-frontend:
