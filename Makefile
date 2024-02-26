@@ -12,3 +12,12 @@ start:
 
 stop:
 	docker compose down
+
+clean:
+	docker compose down
+	docker system prune
+
+remove:
+	clean
+	docker rmi olok-db-nosql
+	docker rmi olok-backend
