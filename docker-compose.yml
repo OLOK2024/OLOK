@@ -18,17 +18,38 @@ services:
 
   db-nosql:
     restart: always
-    container_name: db
+    container_name: db-nosql
     env_file:
-      - ./db.env 
+      - ./db_nosql.env 
     build:
-      context: ./db
+      context: ./db_nosql
       dockerfile: Dockerfile
     networks:
       olok-net-backend:
         ipv4_address: 10.0.1.4
     ports:
       - "27017:27017"
+
+  db-sql:
+    restart: always
+    container_name: db-sql
+    env_file:
+      - ./db_sql.env
+    volumes:
+      - ./db_sql/db:/var/lib/postgresql/data
+    build:
+      context: ./db_sql
+      dockerfile: Dockerfile
+    healthcheck:
+      test: pg_isready -U qcmpt
+      interval: 1m
+      timeout: 10s
+      retries: 2
+    ports:
+      - "5432:5432"
+    networks:
+      olok-net-backend:
+        ipv4_address: 10.0.1.5
 
 networks:
   olok-net-frontend:
