@@ -27,6 +27,8 @@ services:
     networks:
       olok-net-backend:
         ipv4_address: 10.0.1.4
+    ports:
+      - "27017:27017"
 
 networks:
   olok-net-frontend:
