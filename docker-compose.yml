@@ -15,6 +15,9 @@ services:
         ipv4_address: 10.0.0.3
       olok-net-backend:
         ipv4_address: 10.0.1.3
+    depends_on:
+      - db-nosql
+      - db-sql
 
   db-nosql:
     restart: always

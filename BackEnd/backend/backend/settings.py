@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'authentification',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,6 +84,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'olok',
+        'HOST': '10.0.1.5',
+        'PORT': '5432',
+        'USER': 'olok',
+        'PASSWORD': 'olok',
+    },
+    'user_data': {
         'ENGINE': 'djongo',
         'NAME': 'olok',
         'ENFORCE_SCHEMA': False,
@@ -108,6 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+AUTH_USER_MODEL = "authentification.User" 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
