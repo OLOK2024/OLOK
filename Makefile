@@ -18,6 +18,6 @@ clean:
 	docker system prune
 
 remove:
-	clean
+	make clean
 	docker rmi olok-db-nosql
 	docker rmi olok-backend

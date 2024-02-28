@@ -1,4 +1,4 @@
 BackEnd/backend/myenv
 BackEnd/backend/*/__pycache__/*
 BackEnd/backend/db.sqlite3
-BackEnd/backend/*/migrations/__pycache__/*
+BackEnd/backend/*/migrations/*
