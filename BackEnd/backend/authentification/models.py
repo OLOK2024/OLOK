@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
             with transaction.atomic():
                 user = self.model(email=email, **extra_fields)
                 user.set_password(password)
-                user.save(using=self._db)
+                user.save(using="default")
                 return user
         except:
             raise

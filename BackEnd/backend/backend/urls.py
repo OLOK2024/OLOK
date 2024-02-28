@@ -20,7 +20,6 @@ from django.urls import re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from authentification.views import login_view, logout_view, signup_view
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -40,7 +39,5 @@ urlpatterns = [
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('api/auth/login/', login_view),
-    path('api/auth/logout/', logout_view),
-    path('api/auth/signup/', signup_view),
+    path('api/auth/', include('authentification.urls')),
 ]

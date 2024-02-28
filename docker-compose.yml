@@ -44,7 +44,7 @@ services:
       context: ./db_sql
       dockerfile: Dockerfile
     healthcheck:
-      test: pg_isready -U qcmpt
+      test: pg_isready -U olok
       interval: 1m
       timeout: 10s
       retries: 2
