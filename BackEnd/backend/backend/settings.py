@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from datetime import timedelta
+#from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,6 +91,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#Connect to PostgreSQL Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -100,16 +101,16 @@ DATABASES = {
         'USER': 'olok',
         'PASSWORD': 'olok',
     },
-    'user_data': {
-        'ENGINE': 'djongo',
-        'NAME': 'olok',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'mongodb://10.0.1.4:27017',
-            'username': 'olok',
-            'password': 'olok',
-        }
-    }
+    #'user_data': {
+    #    'ENGINE': 'djongo',
+    #    'NAME': 'olok',
+    #    'ENFORCE_SCHEMA': False,
+    #    'CLIENT': {
+    #        'host': 'mongodb://10.0.1.4:27017',
+    #        'username': 'olok',
+    #        'password': 'olok',
+    #    }
+    #}
 }
 
 
