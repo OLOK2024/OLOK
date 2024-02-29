@@ -3,8 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserSerializer
 import tools.mongobd as mongo
+from drf_yasg.utils import swagger_auto_schema
 
 class signup_view(APIView):
+    @swagger_auto_schema(request_body=UserSerializer)
     def post(self, request):
         # Récupération des données de l'utilisateur
         user = request.data
