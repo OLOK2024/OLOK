@@ -23,6 +23,7 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
     "id": "123456789",
     "name": "trousseau1",
     "description": "Ceci est une description",
+    "deletable": true or false
     "keysIDs": [
         "keyId1",
         "keyId2"
