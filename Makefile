@@ -20,4 +20,5 @@ clean:
 remove:
 	make clean
 	docker rmi olok-db-nosql
+	docker rmi olok-db-sql
 	docker rmi olok-backend
