@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'authentification',
     'keys_handler',
+    'bunch_of_keys_handler',
 ]
 
 REST_FRAMEWORK = {
