@@ -7,7 +7,7 @@ from .serializers import KeySerializer
 from drf_yasg.utils import swagger_auto_schema
 
 # Create your views here.
-class newKey_view(APIView):
+class key_view(APIView):
     @swagger_auto_schema(request_body=KeySerializer)
     def post(self, request):
         data = request.data
@@ -40,5 +40,33 @@ class newKey_view(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request):
+        data = request.data
+        keyId = data["keyId"]
+        bunchOfKeysId = data["bunchOfKeysId"]
 
-    
+        # Ouverture d'une connexion à la base de données MongoDB
+        client = mongo.create_mongo_client()
+        db = client["olok"]
+
+        # Vérification de l'existence de la clé
+        collection = db["bunchOfKeys"]
+        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+
+        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+            # Suppression de la clé
+            collection = db["keys"]
+            collection.delete_one({"_id": ObjectId(keyId)})
+
+            # Suppression de la clé dans le porte trousseau
+            collection = db["bunchOfKeys"]
+            collection.update_one(
+                {"_id": ObjectId(bunchOfKeysId)},
+                {"$pull": {"keysIDs": ObjectId(keyId)}}
+            )
+
+            # Fermeture de la connexion à la base de données MongoDB
+            client.close()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)

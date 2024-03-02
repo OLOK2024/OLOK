@@ -2,7 +2,7 @@ from rest_framework import status
 from django.http import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from keys_handler.views import newKey_view
+from keys_handler.views import key_view
 import tools.mongobd as mongo
 import logging
 import json
@@ -16,13 +16,12 @@ class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
         # Vérifiez ici que le bunchOfKeysId appartient au token JWT
         # Si la vérification échoue, renvoyez une réponse 403 Forbidden
         # Si la vérification réussit, laissez la demande continuer normalement
-        if request.method == 'POST' and view_func.view_class.__name__ in [newKey_view.__name__]:
+        if request.method in ['POST', 'DELETE'] and view_func.view_class.__name__ in [key_view.__name__]:
             userId = get_userId(request)
             logger.info("userId: " + str(userId))
             data = json.loads(request.body)
             bunchOfKeysId = data.get('bunchOfKeysId')
             bunchOfKeysHolder = get_bunchOfKeysHolderByOwnerId(userId)
-            print(bunchOfKeysHolder)
 
             if ObjectId(bunchOfKeysId) not in bunchOfKeysHolder.get('bunchOfKeysIDs', []):
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
