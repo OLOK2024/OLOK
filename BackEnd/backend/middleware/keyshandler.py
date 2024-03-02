@@ -21,7 +21,7 @@ class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
             logger.info("userId: " + str(userId))
             data = json.loads(request.body)
             bunchOfKeysId = data.get('bunchOfKeysId')
-            bunchOfKeysHolder = get_bunchOfKeysHolder(userId)
+            bunchOfKeysHolder = get_bunchOfKeysHolderByOwnerId(userId)
             print(bunchOfKeysHolder)
 
             if ObjectId(bunchOfKeysId) not in bunchOfKeysHolder.get('bunchOfKeysIDs', []):
@@ -33,7 +33,7 @@ def get_userId(request):
     user, _ = jwt_authentication.authenticate(request)
     return user.id
 
-def get_bunchOfKeysHolder(bunchOfKeysHolderOwnerId):
+def get_bunchOfKeysHolderByOwnerId(bunchOfKeysHolderOwnerId):
     client = mongo.create_mongo_client()
     db = client["olok"]
     collection = db["bunchOfKeysHolders"]
