@@ -3,8 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import tools.mongobd as mongo
 from bson import ObjectId
-from .serializers import KeySerializer
-from .dto_serializers import AddKeySerializer, InfoKeySerializer, PutKeyUsernameSerializer, PutKeyPasswordSerializer, PutKeyDomainSerializer
+from .serializers import KeySerializer, InfoKeySerializer, AddKeySerializer, PutKeyUsernameSerializer, PutKeyPasswordSerializer, PutKeyDomainSerializer
 from drf_yasg.utils import swagger_auto_schema
 
 # Create your views here.
@@ -46,38 +45,41 @@ class key_view(APIView):
     @swagger_auto_schema(request_body=InfoKeySerializer)
     def delete(self, request):
         data = request.data
-        keyId = data["keyId"]
-        bunchOfKeysId = data["bunchOfKeysId"]
+        serializer = InfoKeySerializer(data=data)
 
-        # Ouverture d'une connexion à la base de données MongoDB
-        client = mongo.create_mongo_client()
-        db = client["olok"]
+        if serializer.is_valid():
 
-        # Vérification de l'existence de la clé
-        collection = db["bunchOfKeys"]
-        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+            bunchOfKeysId = data["bunchOfKeysId"]
+            keyId = data["keyId"]
 
-        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-            # Suppression de la clé
-            collection = db["keys"]
-            collection.delete_one({"_id": ObjectId(keyId)})
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
 
-            # Suppression de la clé dans le porte trousseau
+            # Vérification de l'existence de la clé
             collection = db["bunchOfKeys"]
-            collection.update_one(
-                {"_id": ObjectId(bunchOfKeysId)},
-                {"$pull": {"keysIDs": ObjectId(keyId)}}
-            )
+            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-            # Fermeture de la connexion à la base de données MongoDB
-            client.close()
+            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                # Suppression de la clé
+                collection = db["keys"]
+                collection.delete_one({"_id": ObjectId(keyId)})
 
-            return Response(status=status.HTTP_204_NO_CONTENT)
+                # Suppression de la clé dans le porte trousseau
+                collection = db["bunchOfKeys"]
+                collection.update_one(
+                    {"_id": ObjectId(bunchOfKeysId)},
+                    {"$pull": {"keysIDs": ObjectId(keyId)}}
+                )
+
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class key_password_view(APIView):
 
-    #@swagger_auto_schema(request_body=InfoKeySerializer)
     def get(self, request, bunchOfKeysId, keyId):
 
         # Ouverture d'une connexion à la base de données MongoDB
@@ -102,30 +104,34 @@ class key_password_view(APIView):
     @swagger_auto_schema(request_body=PutKeyPasswordSerializer)
     def put(self, request):
         data = request.data
-        bunchOfKeysId = data["bunchOfKeysId"]
-        keyId = data["keyId"]
-        newPassword = data["newPassword"]
+        serializer = PutKeyPasswordSerializer(data=data)
 
-        # Ouverture d'une connexion à la base de données MongoDB
-        client = mongo.create_mongo_client()
-        db = client["olok"]
+        if serializer.is_valid():
 
-        # Vérification de l'existence de la clé
-        collection = db["bunchOfKeys"]
-        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+            bunchOfKeysId = data["bunchOfKeysId"]
+            keyId = data["keyId"]
+            newPassword = data["newPassword"]
 
-        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-            # Mise à jour du mot de passe
-            collection = db["keys"]
-            collection.update_one(
-                {"_id": ObjectId(keyId)},
-                {"$set": {"password": newPassword}}
-            )
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
 
-            # Fermeture de la connexion à la base de données MongoDB
-            client.close()
+            # Vérification de l'existence de la clé
+            collection = db["bunchOfKeys"]
+            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-            return Response(status=status.HTTP_200_OK)
+            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                # Mise à jour du mot de passe
+                collection = db["keys"]
+                collection.update_one(
+                    {"_id": ObjectId(keyId)},
+                    {"$set": {"password": newPassword}}
+                )
+
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class key_username_view(APIView):
@@ -133,30 +139,34 @@ class key_username_view(APIView):
     @swagger_auto_schema(request_body=PutKeyUsernameSerializer)
     def put(self, request):
         data = request.data
-        bunchOfKeysId = data["bunchOfKeysId"]
-        keyId = data["keyId"]
-        newUsername = data["newUsername"]
+        serializer = PutKeyUsernameSerializer(data=data)
 
-        # Ouverture d'une connexion à la base de données MongoDB
-        client = mongo.create_mongo_client()
-        db = client["olok"]
+        if serializer.is_valid():
 
-        # Vérification de l'existence de la clé
-        collection = db["bunchOfKeys"]
-        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+            bunchOfKeysId = data["bunchOfKeysId"]
+            keyId = data["keyId"]
+            newUsername = data["newUsername"]
 
-        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-            # Mise à jour du nom d'utilisateur
-            collection = db["keys"]
-            collection.update_one(
-                {"_id": ObjectId(keyId)},
-                {"$set": {"username": newUsername}}
-            )
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
 
-            # Fermeture de la connexion à la base de données MongoDB
-            client.close()
+            # Vérification de l'existence de la clé
+            collection = db["bunchOfKeys"]
+            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-            return Response(status=status.HTTP_200_OK)
+            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                # Mise à jour du nom d'utilisateur
+                collection = db["keys"]
+                collection.update_one(
+                    {"_id": ObjectId(keyId)},
+                    {"$set": {"username": newUsername}}
+                )
+
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class key_domain_view(APIView):
@@ -164,28 +174,31 @@ class key_domain_view(APIView):
     @swagger_auto_schema(request_body=PutKeyDomainSerializer)
     def put(self, request):
         data = request.data
-        bunchOfKeysId = data["bunchOfKeysId"]
-        keyId = data["keyId"]
-        newDomain = data["newDomain"]
+        serializer = PutKeyDomainSerializer(data=data)
 
-        # Ouverture d'une connexion à la base de données MongoDB
-        client = mongo.create_mongo_client()
-        db = client["olok"]
+        if serializer.is_valid():
+            bunchOfKeysId = data["bunchOfKeysId"]
+            keyId = data["keyId"]
+            newDomain = data["newDomain"]
 
-        # Vérification de l'existence de la clé
-        collection = db["bunchOfKeys"]
-        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
 
-        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-            # Mise à jour du domaine
-            collection = db["keys"]
-            collection.update_one(
-                {"_id": ObjectId(keyId)},
-                {"$set": {"domain": newDomain}}
-            )
+            # Vérification de l'existence de la clé
+            collection = db["bunchOfKeys"]
+            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-            # Fermeture de la connexion à la base de données MongoDB
-            client.close()
+            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                # Mise à jour du domaine
+                collection = db["keys"]
+                collection.update_one(
+                    {"_id": ObjectId(keyId)},
+                    {"$set": {"domain": newDomain}}
+                )
 
-            return Response(status=status.HTTP_200_OK)
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
