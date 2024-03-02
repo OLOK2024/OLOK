@@ -10,6 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
 
 class key_view(APIView):
+
     @swagger_auto_schema(request_body=AddKeySerializer)
     def post(self, request):
         data = request.data
@@ -76,9 +77,27 @@ class key_view(APIView):
 
 class key_password_view(APIView):
 
-    @swagger_auto_schema(request_body=InfoKeySerializer)
-    def get(self, request):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    #@swagger_auto_schema(request_body=InfoKeySerializer)
+    def get(self, request, bunchOfKeysId, keyId):
+
+        # Ouverture d'une connexion à la base de données MongoDB
+        client = mongo.create_mongo_client()
+        db = client["olok"]
+
+        # Vérification de l'existence de la clé
+        collection = db["bunchOfKeys"]
+        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+
+        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+            # Récupération du mot de passe
+            collection = db["keys"]
+            key = collection.find_one({"_id": ObjectId(keyId)})
+
+            # Fermeture de la connexion à la base de données MongoDB
+            client.close()
+
+            return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(request_body=PutKeyPasswordSerializer)
     def put(self, request):
@@ -95,7 +114,7 @@ class key_password_view(APIView):
         collection = db["bunchOfKeys"]
         bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-        if ObjectId(keyId) not in bunchOfKeys.get("keysIDs", []):
+        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
             # Mise à jour du mot de passe
             collection = db["keys"]
             collection.update_one(
@@ -110,10 +129,6 @@ class key_password_view(APIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class key_username_view(APIView):
-
-    @swagger_auto_schema(request_body=InfoKeySerializer)
-    def get(self, request):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @swagger_auto_schema(request_body=PutKeyUsernameSerializer)
     def put(self, request):
@@ -130,7 +145,7 @@ class key_username_view(APIView):
         collection = db["bunchOfKeys"]
         bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-        if ObjectId(keyId) not in bunchOfKeys.get("keysIDs", []):
+        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
             # Mise à jour du nom d'utilisateur
             collection = db["keys"]
             collection.update_one(
@@ -145,10 +160,6 @@ class key_username_view(APIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class key_domain_view(APIView):
-
-    @swagger_auto_schema(request_body=InfoKeySerializer)
-    def get(self, request):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @swagger_auto_schema(request_body=PutKeyDomainSerializer)
     def put(self, request):
@@ -165,7 +176,7 @@ class key_domain_view(APIView):
         collection = db["bunchOfKeys"]
         bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-        if ObjectId(keyId) not in bunchOfKeys.get("keysIDs", []):
+        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
             # Mise à jour du domaine
             collection = db["keys"]
             collection.update_one(

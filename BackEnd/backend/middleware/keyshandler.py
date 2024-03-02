@@ -16,15 +16,17 @@ class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
         # Vérifiez ici que le bunchOfKeysId appartient au token JWT
         # Si la vérification échoue, renvoyez une réponse 403 Forbidden
         # Si la vérification réussit, laissez la demande continuer normalement
-        if request.method in ['POST', 'DELETE', 'PUT', 'GET'] and view_func.view_class.__name__ in [key_view.__name__]:
-            userId = get_userId(request)
-            logger.info("userId: " + str(userId))
+        if request.method in ['POST', 'DELETE', 'PUT'] and view_func.view_class.__name__ in [key_view.__name__]:
             data = json.loads(request.body)
             bunchOfKeysId = data.get('bunchOfKeysId')
-            bunchOfKeysHolder = get_bunchOfKeysHolderByOwnerId(userId)
-
-            if ObjectId(bunchOfKeysId) not in bunchOfKeysHolder.get('bunchOfKeysIDs', []):
+            if not isLegitOwner(request, bunchOfKeysId):
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        if request.method in ['GET'] and view_func.view_class.__name__ in [key_view.__name__]:
+            bunchOfKeysId = request.resolver_match.kwargs.get('bunchOfKeysId')
+            if not isLegitOwner(request, bunchOfKeysId):
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
         return None
 
 def get_userId(request):
@@ -42,3 +44,8 @@ def get_bunchOfKeysHolderByOwnerId(bunchOfKeysHolderOwnerId):
 
     client.close()
     return bunchOfKeysHolder
+
+def isLegitOwner(request, bunchOfKeysId):
+    userId = get_userId(request)
+    bunchOfKeysHolder = get_bunchOfKeysHolderByOwnerId(userId)
+    return ObjectId(bunchOfKeysId) in bunchOfKeysHolder.get('bunchOfKeysIDs', [])
