@@ -16,7 +16,7 @@ class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
         # Vérifiez ici que le bunchOfKeysId appartient au token JWT
         # Si la vérification échoue, renvoyez une réponse 403 Forbidden
         # Si la vérification réussit, laissez la demande continuer normalement
-        if request.method in ['POST', 'DELETE'] and view_func.view_class.__name__ in [key_view.__name__]:
+        if request.method in ['POST', 'DELETE', 'PUT', 'GET'] and view_func.view_class.__name__ in [key_view.__name__]:
             userId = get_userId(request)
             logger.info("userId: " + str(userId))
             data = json.loads(request.body)
