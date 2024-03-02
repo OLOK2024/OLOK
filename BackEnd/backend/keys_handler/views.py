@@ -4,11 +4,13 @@ from rest_framework import status
 import tools.mongobd as mongo
 from bson import ObjectId
 from .serializers import KeySerializer
+from .dto_serializers import AddKeySerializer, DelKeySerializer
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 # Create your views here.
 class key_view(APIView):
-    @swagger_auto_schema(request_body=KeySerializer)
+    @swagger_auto_schema(request_body=AddKeySerializer)
     def post(self, request):
         data = request.data
         serializer = KeySerializer(data=data)
@@ -40,6 +42,7 @@ class key_view(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(request_body=DelKeySerializer)
     def delete(self, request):
         data = request.data
         keyId = data["keyId"]
