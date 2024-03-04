@@ -4,6 +4,7 @@ from django.utils.deprecation import MiddlewareMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from keys_handler.views import key_view
 import tools.mongobd as mongo
+import tools.jwt as jwt
 import logging
 import json
 from bson import ObjectId
@@ -29,11 +30,6 @@ class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
 
         return None
 
-def get_userId(request):
-    jwt_authentication = JWTAuthentication()
-    user, _ = jwt_authentication.authenticate(request)
-    return user.id
-
 def get_bunchOfKeysHolderByOwnerId(bunchOfKeysHolderOwnerId):
     client = mongo.create_mongo_client()
     db = client["olok"]
@@ -46,6 +42,6 @@ def get_bunchOfKeysHolderByOwnerId(bunchOfKeysHolderOwnerId):
     return bunchOfKeysHolder
 
 def isLegitOwner(request, bunchOfKeysId):
-    userId = get_userId(request)
+    userId = jwt.get_userId(request)
     bunchOfKeysHolder = get_bunchOfKeysHolderByOwnerId(userId)
     return ObjectId(bunchOfKeysId) in bunchOfKeysHolder.get('bunchOfKeysIDs', [])
