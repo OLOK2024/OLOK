@@ -45,7 +45,7 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
 }
 ```
 
-Proposition: l'utilisateur a le droit à 1 seul porte-trousseau favoris créé par défaut composé d'un seul trousseau et un porte-trousseau normal composé lui de plusieurs trousseaux.
+Proposition: l'utilisateur a le droit à 1 seul trousseau favoris créé par défaut et un porte-trousseau normal composé lui de plusieurs trousseaux.
 
 #### Frontend request
 
