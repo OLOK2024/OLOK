@@ -14,3 +14,11 @@ class DelBunchOfKeys(models.Model):
 
     def __str__(self):
         return self.name
+
+class PutBunchOfKeys(models.Model):
+    bunchOfKeysId = models.CharField(max_length=24)
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=1024)
+
+    def __str__(self):
+        return self.bunchOfKeysId

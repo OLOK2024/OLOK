@@ -28,7 +28,7 @@ class VerifyLegitOwnerMiddleware(MiddlewareMixin):
             if not isLegitOwner(request, bunchOfKeysId):
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
-        if request.method in ['DELETE'] and view_func.view_class.__name__ in [bunchOfKey_view.__name__]:
+        if request.method in ['DELETE', 'PUT'] and view_func.view_class.__name__ in [bunchOfKey_view.__name__]:
             data = json.loads(request.body)
             bunchOfKeysId = data.get('bunchOfKeysId')
             if not isLegitOwner(request, bunchOfKeysId):

@@ -2,7 +2,7 @@ import tools.jwt as jwt
 import tools.mongobd as mongo
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import BunchOfKeysSerializer, DelBunchOfKeysSerializer
+from .serializers import BunchOfKeysSerializer, DelBunchOfKeysSerializer, PutBunchOfKeysSerializer
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from bson import ObjectId
@@ -96,6 +96,35 @@ class bunchOfKey_view(APIView):
                 collection.update_one(
                     {"idOwner": idUser},
                     {"$pull": {"bunchOfKeysIDs": ObjectId(data["bunchOfKeysId"])}
+                })
+
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        pass
+
+    @swagger_auto_schema(request_body=PutBunchOfKeysSerializer)
+    def put(self, request):
+        data = request.data
+        serializer = PutBunchOfKeysSerializer(data=data)
+
+        if serializer.is_valid():
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
+
+            collection = db["bunchOfKeys"]
+            bunchOfKeys = collection.find_one({"_id": ObjectId(data["bunchOfKeysId"])})
+
+            # Vérification si on peut modifier le porte trousseau
+            if bunchOfKeys['editable']:
+                collection.update_one(
+                    {"_id": ObjectId(data["bunchOfKeysId"])},
+                    {"$set": {"name": data["name"], "description": data["description"]}
                 })
 
                 # Fermeture de la connexion à la base de données MongoDB
