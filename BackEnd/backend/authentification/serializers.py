@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name',
                   'date_joined', 'password', 'confirmed_password',
-                  'start_of_day', 'end_of_day', 'workdays')
+                  'start_of_day', 'end_of_day', 'workdays', 'country_code')
 
     def validate(self, data):
         if data.get('password') != data.get('confirmed_password'):
@@ -23,7 +23,8 @@ class UserSerializer(serializers.ModelSerializer):
                                    last_name=validated_data.get('last_name', ''),
                                    start_of_day=validated_data.get('start_of_day', '00:00'),
                                    end_of_day=validated_data.get('end_of_day', '23:59'),
-                                   workdays=validated_data.get('workdays', 0b1111100))
+                                   workdays=validated_data.get('workdays', 0b1111100),
+                                   country_code=validated_data.get('country_code', ''))
         user.set_password(validated_data['password'])
         user.save()
         return user
