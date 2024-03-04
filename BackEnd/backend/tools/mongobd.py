@@ -18,12 +18,13 @@ def create_bunchOfKeysHolder(idOwner):
     }
     return bunchOfKeysHolder
 
-def create_bunchOfKeys(name, description, deletable, role):
+def create_bunchOfKeys(name, description, deletable, editable, role):
     # Création d'un trousseau
     bunchOfKeys = {
         "name": name,
         "description": description,
         "deletable": deletable,
+        "editable": editable,
         "role": role,
         "keysIDs": []
     }

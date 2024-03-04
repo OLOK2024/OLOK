@@ -25,7 +25,7 @@ class signup_view(APIView):
             id_document_bunchOfKeysHolder = collection.insert_one(bunchOfKeysHolder)
 
             # Création d'un porte trousseau par défaut
-            bunchOfKeys = mongo.create_bunchOfKeys("default bunch of keys", "this is the default bunch of keys", False, "normal")
+            bunchOfKeys = mongo.create_bunchOfKeys("default bunch of keys", "this is the default bunch of keys", False, False, "default")
             collection = db["bunchOfKeys"]
             id_document_bunchOfKeys = collection.insert_one(bunchOfKeys)
 

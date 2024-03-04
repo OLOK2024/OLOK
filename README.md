@@ -22,9 +22,10 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
 {
     "id": "123456789",
     "name": "trousseau1",
-    "role": "favorite | normal",
+    "role": "favorite | default | normal",
     "description": "Ceci est une description",
-    "deletable": true or false
+    "deletable": true or false,
+    "editable": true or false,
     "keysIDs": [
         "keyId1",
         "keyId2"

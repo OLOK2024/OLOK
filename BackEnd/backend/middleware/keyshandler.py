@@ -1,8 +1,8 @@
 from rest_framework import status
 from django.http import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from keys_handler.views import key_view
+from bunch_of_keys_handler.views import bunchOfKey_view
 import tools.mongobd as mongo
 import tools.jwt as jwt
 import logging
@@ -12,7 +12,7 @@ from bson import ObjectId
 # Obtenez un logger pour votre application
 logger = logging.getLogger('django')
 
-class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
+class VerifyLegitOwnerMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, view_args, view_kwargs):
         # Vérifiez ici que le bunchOfKeysId appartient au token JWT
         # Si la vérification échoue, renvoyez une réponse 403 Forbidden
@@ -25,6 +25,12 @@ class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
 
         if request.method in ['GET'] and view_func.view_class.__name__ in [key_view.__name__]:
             bunchOfKeysId = request.resolver_match.kwargs.get('bunchOfKeysId')
+            if not isLegitOwner(request, bunchOfKeysId):
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        if request.method in ['DELETE'] and view_func.view_class.__name__ in [bunchOfKey_view.__name__]:
+            data = json.loads(request.body)
+            bunchOfKeysId = data.get('bunchOfKeysId')
             if not isLegitOwner(request, bunchOfKeysId):
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
