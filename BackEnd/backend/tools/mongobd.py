@@ -9,21 +9,22 @@ def create_mongo_client():
         )
     )
 
-def create_bunchOfKeysHolder(idOwner, role):
+def create_bunchOfKeysHolder(idOwner):
     # Création d'un porte trousseau
     bunchOfKeysHolder = {
         "idOwner": idOwner,
-        "role": role,
+
         "bunchOfKeysIDs": []
     }
     return bunchOfKeysHolder
 
-def create_bunchOfKeys(name, description, deletable):
+def create_bunchOfKeys(name, description, deletable, role):
     # Création d'un trousseau
     bunchOfKeys = {
         "name": name,
         "description": description,
         "deletable": deletable,
+        "role": role,
         "keysIDs": []
     }
     return bunchOfKeys

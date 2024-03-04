@@ -20,12 +20,12 @@ class signup_view(APIView):
             db = client["olok"]
 
             # Création de son porte trousseau par défaut
-            bunchOfKeysHolder = mongo.create_bunchOfKeysHolder(serializer.data["id"], "normal")
+            bunchOfKeysHolder = mongo.create_bunchOfKeysHolder(serializer.data["id"])
             collection = db["bunchOfKeysHolders"]
             id_document_bunchOfKeysHolder = collection.insert_one(bunchOfKeysHolder)
 
             # Création d'un porte trousseau par défaut
-            bunchOfKeys = mongo.create_bunchOfKeys("default bunch of keys", "this is the default bunch of keys", False)
+            bunchOfKeys = mongo.create_bunchOfKeys("default bunch of keys", "this is the default bunch of keys", False, "normal")
             collection = db["bunchOfKeys"]
             id_document_bunchOfKeys = collection.insert_one(bunchOfKeys)
 
