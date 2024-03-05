@@ -53,26 +53,22 @@ Pour le frontend on pourra renvoyer une structure plus conséquente mais complè
 
 ```json
 {
-    "id": "123456789123",
-    "idOwner": "65431",
-    "role": "normal",
-    "bunchOfKeysIDs": [
+    "bunchOfKeys": [
         {
             "id": "123456789",
             "name": "trousseau1",
             "description": "Ceci est une description",
-            "keysIDs": [
+            "role": "normal",
+            "keys": [
                 {
                     "id": "1234",
                     "domain": "domaine1.domaine",
                     "username": "john_doe",
-                    "password": "password1"
                 },
                 {
                     "id": "5678",
                     "domain": "domaine2.domaine",
                     "username": "john_doe",
-                    "password": "password2"
                 }
             ]
         },
@@ -80,18 +76,17 @@ Pour le frontend on pourra renvoyer une structure plus conséquente mais complè
             "id": "987654321",
             "name": "trousseau2",
             "description": "Ceci est une description",
-            "keysIDs": [
+            "role": "normal",
+            "keys": [
                 {
                     "id": "8765",
                     "domain": "domaine3.domaine",
                     "username": "john_doe",
-                    "password": "password3"
                 },
                 {
                     "id": "4321",
                     "domain": "domaine4.domaine",
                     "username": "john_doe",
-                    "password": "password4"
                 }
             ]
         }

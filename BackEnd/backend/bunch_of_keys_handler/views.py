@@ -104,9 +104,6 @@ class bunchOfKey_view(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request):
-        pass
-
     @swagger_auto_schema(request_body=PutBunchOfKeysSerializer)
     def put(self, request):
         data = request.data
@@ -132,3 +129,32 @@ class bunchOfKey_view(APIView):
 
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+
+        userId = jwt.get_userId(request)
+
+        # Ouverture d'une connexion à la base de données MongoDB
+        client = mongo.create_mongo_client()
+        db = client["olok"]
+        collection = db["bunchOfKeysHolders"]
+
+        # Récupérer la liste des trousseaux de clés
+        bunchOfKeysHolder = collection.find_one({"idOwner": userId})
+
+        # On retire l'id du propriétaire et de l'objet
+        bunchOfKeysHolder.pop("_id")
+        bunchOfKeysHolder.pop("idOwner")
+
+        # Récupérer les trousseaux de clés
+        bunchOfKeysIDs = bunchOfKeysHolder.get("bunchOfKeysIDs", [])
+
+        result = []
+
+        for bunchOfKeys in bunchOfKeysIDs:
+            result.append(mongo.create_BunchOfKeysData(db, bunchOfKeys))
+
+        # Fermeture de la connexion à la base de données MongoDB
+        client.close()
+
+        return Response(result, status=status.HTTP_200_OK)
