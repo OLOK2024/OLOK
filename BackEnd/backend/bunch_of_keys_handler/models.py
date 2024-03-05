@@ -22,3 +22,11 @@ class PutBunchOfKeys(models.Model):
 
     def __str__(self):
         return self.bunchOfKeysId
+
+class PutKeyNewBunchOfKeys(models.Model):
+    keyId = models.CharField(max_length=24)
+    bunchOfKeysId = models.CharField(max_length=24)
+    newBunchOfKeysId = models.CharField(max_length=24)
+
+    def __str__(self):
+        return self.keyId

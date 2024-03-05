@@ -2,7 +2,7 @@ from rest_framework import status
 from django.http import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
 from keys_handler.views import key_view
-from bunch_of_keys_handler.views import bunchOfKey_view
+from bunch_of_keys_handler.views import bunchOfKey_view, keyBunchOfKeys_view
 import tools.mongobd as mongo
 import tools.jwt as jwt
 import logging
@@ -32,6 +32,13 @@ class VerifyLegitOwnerMiddleware(MiddlewareMixin):
             data = json.loads(request.body)
             bunchOfKeysId = data.get('bunchOfKeysId')
             if not isLegitOwner(request, bunchOfKeysId):
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        if request.method in ['PUT'] and view_func.view_class.__name__ in [keyBunchOfKeys_view.__name__]:
+            data = json.loads(request.body)
+            bunchOfKeysId = data.get('bunchOfKeysId')
+            newBunchOfKeysId = data.get('newBunchOfKeysId')
+            if not isLegitOwner(request, bunchOfKeysId) or not isLegitOwner(request, newBunchOfKeysId):
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
         return None

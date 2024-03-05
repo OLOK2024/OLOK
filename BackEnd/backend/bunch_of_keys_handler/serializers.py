@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BunchOfKeys, DelBunchOfKeys, PutBunchOfKeys
+from .models import BunchOfKeys, DelBunchOfKeys, PutBunchOfKeys, PutKeyNewBunchOfKeys
 
 class BunchOfKeysSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +14,9 @@ class DelBunchOfKeysSerializer(serializers.ModelSerializer):
 class PutBunchOfKeysSerializer(serializers.ModelSerializer):
     class Meta:
         model = PutBunchOfKeys
+        fields = '__all__'
+
+class PutKeyNewBunchOfKeysSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PutKeyNewBunchOfKeys
         fields = '__all__'

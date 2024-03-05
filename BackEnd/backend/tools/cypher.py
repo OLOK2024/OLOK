@@ -12,7 +12,7 @@ def generate_keys():
 def load_keys():
     with open('keys/pubkey.pem', 'rb') as f:
         pubKey = rsa.PublicKey.load_pkcs1(f.read())
-    
+
     with open('keys/privkey.pem', 'rb') as f:
         privKey = rsa.PrivateKey.load_pkcs1(f.read())
 
@@ -26,7 +26,7 @@ def decrypt(ciphertext, key):
         return rsa.decrypt(ciphertext, key).decode('ascii')
     except:
         return False
-    
+
 def sign_sha1(msg,key):
     return rsa.sign(msg.encode('ascii'), key, 'SHA-1')
 
@@ -35,7 +35,7 @@ def verify_sha1(msg, signature, key):
         return rsa.verify(msg.encode('ascii'), signature, key) == 'SHA-1'
     except:
         return False
-    
+
 generate_keys()
 pubKey, privKey =load_keys()
 

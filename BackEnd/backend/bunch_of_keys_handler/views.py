@@ -2,7 +2,7 @@ import tools.jwt as jwt
 import tools.mongobd as mongo
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import BunchOfKeysSerializer, DelBunchOfKeysSerializer, PutBunchOfKeysSerializer
+from .serializers import BunchOfKeysSerializer, DelBunchOfKeysSerializer, PutBunchOfKeysSerializer, PutKeyNewBunchOfKeysSerializer
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from bson import ObjectId
@@ -158,3 +158,40 @@ class bunchOfKey_view(APIView):
         client.close()
 
         return Response(result, status=status.HTTP_200_OK)
+
+class keyBunchOfKeys_view(APIView):
+
+    @swagger_auto_schema(request_body=PutKeyNewBunchOfKeysSerializer)
+    def put(self, request):
+        data = request.data
+        serializer = PutKeyNewBunchOfKeysSerializer(data=data)
+
+        if serializer.is_valid():
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
+
+            # Ajout de la clé dans le porte trousseau
+            collection = db["bunchOfKeys"]
+            bunch_of_keys = collection.find_one({"_id": ObjectId(data["bunchOfKeysId"])})
+            print(bunch_of_keys)
+
+            if ObjectId(data["keyId"]) in bunch_of_keys["keysIDs"]:
+
+                collection.update_one(
+                    {"_id": ObjectId(data["newBunchOfKeysId"])},
+                    {"$push": {"keysIDs": ObjectId(data["keyId"])}
+                })
+
+                # Suppression de la clé dans le porte trousseau
+                collection = db["bunchOfKeys"]
+                collection.update_one(
+                    {"_id": ObjectId(data["bunchOfKeysId"])},
+                    {"$pull": {"keysIDs": ObjectId(data["keyId"])}
+                })
+
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
