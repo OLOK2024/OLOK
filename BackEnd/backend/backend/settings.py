@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'authentification',
     'keys_handler',
     'bunch_of_keys_handler',
+    'profile_handler',
 ]
 
 REST_FRAMEWORK = {
