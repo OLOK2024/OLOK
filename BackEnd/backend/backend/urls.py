@@ -42,4 +42,5 @@ urlpatterns = [
     path('api/auth/', include('authentification.urls')),
     path('api/keys/', include('keys_handler.urls')),
     path('api/bunchOfKeys/', include('bunch_of_keys_handler.urls')),
+    path('api/profile/', include('profile_handler.urls')),
 ]
