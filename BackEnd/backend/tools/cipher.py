@@ -1,29 +1,35 @@
 import rsa
 
+PATH_PUBKEY = "/olok_service/tools/keys/pubkey.pem"
+PATH_PRIVKEY = "/olok_service/tools/keys/privkey.pem"
 
 def generate_keys():
     (pubKey,privKey) = rsa.newkeys(1024)
-    with open('keys/pubkey.pem', 'wb') as f:
+    with open(PATH_PUBKEY, 'wb') as f:
         f.write(pubKey.save_pkcs1('PEM'))
 
-    with open('keys/privkey.pem', 'wb') as f:
+    with open(PATH_PRIVKEY, 'wb') as f:
         f.write(privKey.save_pkcs1('PEM'))
 
 def load_keys():
-    with open('keys/pubkey.pem', 'rb') as f:
+    with open(PATH_PUBKEY, 'rb') as f:
         pubKey = rsa.PublicKey.load_pkcs1(f.read())
 
-    with open('keys/privkey.pem', 'rb') as f:
+    with open(PATH_PRIVKEY, 'rb') as f:
         privKey = rsa.PrivateKey.load_pkcs1(f.read())
 
     return pubKey, privKey
 
-def encrypt(msg,key):
-    return rsa.encrypt(msg.encode('ascii'), key)
+def encrypt(msg):
+    pubKey, privKey = load_keys()
+    cipher_msg = rsa.encrypt(msg.encode('ascii'), pubKey)
+    return (cipher_msg, sign_sha1(msg, privKey))
 
-def decrypt(ciphertext, key):
+def decrypt(ciphertext, signature):
+    pubKey, privKey = load_keys()
     try:
-        return rsa.decrypt(ciphertext, key).decode('ascii')
+        decipher_msg = rsa.decrypt(ciphertext, privKey).decode('ascii')
+        return (decipher_msg, verify_sha1(decipher_msg, signature, pubKey))
     except:
         return False
 
@@ -36,15 +42,11 @@ def verify_sha1(msg, signature, key):
     except:
         return False
 
-generate_keys()
-pubKey, privKey =load_keys()
-
+"""
 message = input('Enter a message:')
-ciphertext = encrypt (message,pubKey)
+(ciphertext, signature) = encrypt(message)
 
-signature = sign_sha1(message,privKey)
-
-plaintext = decrypt(ciphertext, privKey)
+(plaintext, signature) = decrypt(ciphertext, signature)
 
 print(f'Cipher text: {ciphertext}')
 print(f'Signature: {signature}')
@@ -54,7 +56,8 @@ if plaintext:
 else:
     print('Could not decrypt the message.')
 
-if verify_sha1(plaintext,signature,pubKey):
+if signature:
     print('Signature verified')
 else:
     print('Could not verify the message signature')
+"""

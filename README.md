@@ -13,7 +13,8 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
     "id": "1234",
     "domain": "domaine.domaine",
     "username": "john_doe",
-    "password": "password"
+    "password": "password",
+    "signature": "signature"
 }
 ```
 

@@ -38,6 +38,7 @@ def create_KeysList(db, KeysIDs):
         print(keyID)
         key = db["keys"].find_one({"_id": keyID})
         key.pop("password")
+        key.pop("signature")
         key["keyId"] = str(key["_id"])
         key.pop("_id")
         result.append(key)

@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 import tools.mongobd as mongo
+import tools.cipher as cipher
 from bson import ObjectId
 from .serializers import KeySerializer, InfoKeySerializer, AddKeySerializer, PutKeyUsernameSerializer, PutKeyPasswordSerializer, PutKeyDomainSerializer
 from drf_yasg.utils import swagger_auto_schema
@@ -24,6 +25,9 @@ class key_view(APIView):
 
             # Création d'une nouvelle clé
             key = serializer.data
+            cipher_key = cipher.encrypt(key["password"])
+            key["password"] = cipher_key[0]
+            key["signature"] = cipher_key[1]
             collection = db["keys"]
             id_document_key = collection.insert_one(key)
 
@@ -38,6 +42,8 @@ class key_view(APIView):
 
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
+
+                serializer.data.pop("password")
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -94,11 +100,15 @@ class key_password_view(APIView):
             # Récupération du mot de passe
             collection = db["keys"]
             key = collection.find_one({"_id": ObjectId(keyId)})
+            decipher_key = cipher.decrypt(key["password"], key["signature"])
+            key["password"] = decipher_key[0]
 
             # Fermeture de la connexion à la base de données MongoDB
             client.close()
 
-            return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
+            # Vérification de la validité du mot de passe
+            if key["signature"]:
+                return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(request_body=PutKeyPasswordSerializer)
@@ -121,12 +131,22 @@ class key_password_view(APIView):
             bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
             if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+
+                # Chiffrement du nouveau mot de passe
+                cipher_key = cipher.encrypt(newPassword)
+
                 # Mise à jour du mot de passe
                 collection = db["keys"]
                 collection.update_one(
                     {"_id": ObjectId(keyId)},
-                    {"$set": {"password": newPassword}}
+                    {"$set": {"password": cipher_key[0]}}
                 )
+
+                # Mise à jour de la signature
+                collection.update_one(
+                    {"_id": ObjectId(keyId)},
+                    {"$set": {"signature": cipher_key[1]}
+                })
 
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
