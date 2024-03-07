@@ -6,6 +6,7 @@ from authentification.models import User
 from drf_yasg.utils import swagger_auto_schema
 
 import tools.jwt as jwt
+import tools.mongobd as mongo
 
 # Create your views here.
 
@@ -35,4 +36,40 @@ class profile_view(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
-        pass
+
+        userId = jwt.get_userId(request)
+
+        # On se connecte à la base de données mongo
+        client = mongo.create_mongo_client()
+        db = client["olok"]
+
+        # On récupère le porte trousseau holder
+        collection = db["bunchOfKeysHolders"]
+        bunchOfKeysHolder = collection.find_one({"idOwner": userId})
+
+        # On supprime chaque trousseau
+        for bunchOfKeysId in bunchOfKeysHolder["bunchOfKeysIDs"]:
+            collection = db["bunchOfKeys"]
+            bunchOfKeys = collection.find_one({"_id": bunchOfKeysId})
+
+            # On supprime les clés du trousseau
+            collection = db["keys"]
+            for keyId in bunchOfKeys["keysIDs"]:
+                collection.delete_one({"_id": keyId})
+
+            # On supprime le trousseau
+            collection = db["bunchOfKeys"]
+            collection.delete_one({"_id": bunchOfKeysId})
+
+        # On supprime le porte trousseau holder
+        collection = db["bunchOfKeysHolders"]
+        collection.delete_one({"idOwner": userId})
+
+        # On se déconnecte de la base de données mongo
+        client.close()
+
+        # On supprime l'utilisateur
+        user = User.objects.get(id=userId)
+        user.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
