@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import PutProfileDataSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status, generics
+from .serializers import PutProfileDataSerializer, ChangePasswordSerializer
 from authentification.models import User
 from drf_yasg.utils import swagger_auto_schema
 
@@ -73,3 +74,12 @@ class profile_view(APIView):
         user.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class change_password_view(generics.UpdateAPIView):
+
+    serializer_class = ChangePasswordSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        # Get the user object based on the JWT payload
+        return self.request.user
