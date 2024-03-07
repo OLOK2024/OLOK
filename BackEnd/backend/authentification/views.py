@@ -20,20 +20,26 @@ class signup_view(APIView):
             db = client["olok"]
 
             # Création de son porte trousseau par défaut
-            bunchOfKeysHolder = mongo.create_bunchOfKeysHolder(serializer.data["id"], "normal")
+            bunchOfKeysHolder = mongo.create_bunchOfKeysHolder(serializer.data["id"])
             collection = db["bunchOfKeysHolders"]
             id_document_bunchOfKeysHolder = collection.insert_one(bunchOfKeysHolder)
 
             # Création d'un porte trousseau par défaut
-            bunchOfKeys = mongo.create_bunchOfKeys("default bunch of keys", "this is the default bunch of keys", False)
+            bunchOfKeysDefault = mongo.create_bunchOfKeys("default bunch of keys", "this is the default bunch of keys", False, False, "default")
+            bunchOfKeysFavorite = mongo.create_bunchOfKeys("favorite bunch of keys", "this is the favorite bunch of keys", False, False, "favorite")
             collection = db["bunchOfKeys"]
-            id_document_bunchOfKeys = collection.insert_one(bunchOfKeys)
+            id_document_bunchOfKeysDefault = collection.insert_one(bunchOfKeysDefault)
+            id_document_bunchOfKeysFavorite = collection.insert_one(bunchOfKeysFavorite)
 
             # Ajout du trousseau par défaut dans le porte trousseau par défaut
             collection = db["bunchOfKeysHolders"]
             collection.update_one(
                 {"_id": id_document_bunchOfKeysHolder.inserted_id},
-                {"$push": {"bunchOfKeysIDs": id_document_bunchOfKeys.inserted_id}}
+                {"$push": {"bunchOfKeysIDs": id_document_bunchOfKeysDefault.inserted_id}}
+            )
+            collection.update_one(
+                {"_id": id_document_bunchOfKeysHolder.inserted_id},
+                {"$push": {"bunchOfKeysIDs": id_document_bunchOfKeysFavorite.inserted_id}}
             )
 
             # Fermeture de la connexion à la base de données MongoDB

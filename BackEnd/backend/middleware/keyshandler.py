@@ -1,9 +1,10 @@
 from rest_framework import status
 from django.http import HttpResponse
 from django.utils.deprecation import MiddlewareMixin
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from keys_handler.views import newKey_view
+from keys_handler.views import key_view
+from bunch_of_keys_handler.views import bunchOfKey_view, keyBunchOfKeys_view
 import tools.mongobd as mongo
+import tools.jwt as jwt
 import logging
 import json
 from bson import ObjectId
@@ -11,29 +12,38 @@ from bson import ObjectId
 # Obtenez un logger pour votre application
 logger = logging.getLogger('django')
 
-class VerifyBunchOfKeysIdMiddleware(MiddlewareMixin):
+class VerifyLegitOwnerMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, view_args, view_kwargs):
         # Vérifiez ici que le bunchOfKeysId appartient au token JWT
         # Si la vérification échoue, renvoyez une réponse 403 Forbidden
         # Si la vérification réussit, laissez la demande continuer normalement
-        if request.method == 'POST' and view_func.view_class.__name__ in [newKey_view.__name__]:
-            userId = get_userId(request)
-            logger.info("userId: " + str(userId))
+        if request.method in ['POST', 'DELETE', 'PUT'] and view_func.view_class.__name__ in [key_view.__name__]:
             data = json.loads(request.body)
             bunchOfKeysId = data.get('bunchOfKeysId')
-            bunchOfKeysHolder = get_bunchOfKeysHolder(userId)
-            print(bunchOfKeysHolder)
-
-            if ObjectId(bunchOfKeysId) not in bunchOfKeysHolder.get('bunchOfKeysIDs', []):
+            if not isLegitOwner(request, bunchOfKeysId):
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        if request.method in ['GET'] and view_func.view_class.__name__ in [key_view.__name__]:
+            bunchOfKeysId = request.resolver_match.kwargs.get('bunchOfKeysId')
+            if not isLegitOwner(request, bunchOfKeysId):
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        if request.method in ['DELETE', 'PUT'] and view_func.view_class.__name__ in [bunchOfKey_view.__name__]:
+            data = json.loads(request.body)
+            bunchOfKeysId = data.get('bunchOfKeysId')
+            if not isLegitOwner(request, bunchOfKeysId):
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        if request.method in ['PUT'] and view_func.view_class.__name__ in [keyBunchOfKeys_view.__name__]:
+            data = json.loads(request.body)
+            bunchOfKeysId = data.get('bunchOfKeysId')
+            newBunchOfKeysId = data.get('newBunchOfKeysId')
+            if not isLegitOwner(request, bunchOfKeysId) or not isLegitOwner(request, newBunchOfKeysId):
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
         return None
 
-def get_userId(request):
-    jwt_authentication = JWTAuthentication()
-    user, _ = jwt_authentication.authenticate(request)
-    return user.id
-
-def get_bunchOfKeysHolder(bunchOfKeysHolderOwnerId):
+def get_bunchOfKeysHolderByOwnerId(bunchOfKeysHolderOwnerId):
     client = mongo.create_mongo_client()
     db = client["olok"]
     collection = db["bunchOfKeysHolders"]
@@ -43,3 +53,8 @@ def get_bunchOfKeysHolder(bunchOfKeysHolderOwnerId):
 
     client.close()
     return bunchOfKeysHolder
+
+def isLegitOwner(request, bunchOfKeysId):
+    userId = jwt.get_userId(request)
+    bunchOfKeysHolder = get_bunchOfKeysHolderByOwnerId(userId)
+    return ObjectId(bunchOfKeysId) in bunchOfKeysHolder.get('bunchOfKeysIDs', [])

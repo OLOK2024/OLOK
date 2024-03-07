@@ -35,6 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    country_code = models.CharField(max_length=2, blank=True, null=True)
 
     start_of_day = models.TimeField(default='00:00')
     end_of_day = models.TimeField(default='23:59')

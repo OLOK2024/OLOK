@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'authentification',
     'keys_handler',
+    'bunch_of_keys_handler',
 ]
 
 REST_FRAMEWORK = {
@@ -66,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middleware.keyshandler.VerifyBunchOfKeysIdMiddleware',
+    'middleware.keyshandler.VerifyLegitOwnerMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
