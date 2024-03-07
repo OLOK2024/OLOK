@@ -1,5 +1,4 @@
-import tools.jwt as jwt
-import tools.mongobd as mongo
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import BunchOfKeysSerializer, DelBunchOfKeysSerializer, PutBunchOfKeysSerializer, PutKeyNewBunchOfKeysSerializer
@@ -7,9 +6,14 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from bson import ObjectId
 
+import tools.jwt as jwt
+import tools.mongobd as mongo
+
 # Create your views here.
 
 class bunchOfKey_view(APIView):
+
+    permission_classes = (IsAuthenticated,)
 
     @swagger_auto_schema(request_body=BunchOfKeysSerializer)
     def post(self, request):
@@ -160,6 +164,8 @@ class bunchOfKey_view(APIView):
         return Response(result, status=status.HTTP_200_OK)
 
 class keyBunchOfKeys_view(APIView):
+
+    permission_classes = (IsAuthenticated,)
 
     @swagger_auto_schema(request_body=PutKeyNewBunchOfKeysSerializer)
     def put(self, request):

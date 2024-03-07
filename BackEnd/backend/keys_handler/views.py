@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 import tools.mongobd as mongo
 import tools.cipher as cipher
@@ -10,6 +11,8 @@ from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
 
 class key_view(APIView):
+
+    permission_classes = (IsAuthenticated,)
 
     @swagger_auto_schema(request_body=AddKeySerializer)
     def post(self, request):
@@ -86,6 +89,8 @@ class key_view(APIView):
 
 class key_password_view(APIView):
 
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, bunchOfKeysId, keyId):
 
         # Ouverture d'une connexion à la base de données MongoDB
@@ -156,6 +161,8 @@ class key_password_view(APIView):
 
 class key_username_view(APIView):
 
+    permission_classes = (IsAuthenticated,)
+
     @swagger_auto_schema(request_body=PutKeyUsernameSerializer)
     def put(self, request):
         data = request.data
@@ -190,6 +197,8 @@ class key_username_view(APIView):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 class key_domain_view(APIView):
+
+    permission_classes = (IsAuthenticated,)
 
     @swagger_auto_schema(request_body=PutKeyDomainSerializer)
     def put(self, request):

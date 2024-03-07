@@ -13,6 +13,8 @@ import tools.mongobd as mongo
 
 class profile_view(APIView):
 
+    permission_classes = (IsAuthenticated,)
+
     @swagger_auto_schema(request_body=PutProfileDataSerializer)
     def put(self, request):
         data = request.data
