@@ -10,7 +10,7 @@ class VerifyVpnIdMiddleware(MiddlewareMixin):
 		# Si la vérification ne détecte pas le vpn alors laissez la demande continuer normalement
 		if request.method == 'POST' and view_func.view_class.__name__ in [ TokenObtainPairView.__name__, TokenRefreshView.__name__]:
 
-			if detect_vpn(request)[0]:
+			if detect_vpn(request)[0] and detect_vpn(request)[1] !=  :
 				return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 		return None
 
