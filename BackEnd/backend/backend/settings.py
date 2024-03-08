@@ -77,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middleware.keyshandler.VerifyLegitOwnerMiddleware',
+    'middleware.conditionnalaccess.VerifyVpnIdMiddleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
