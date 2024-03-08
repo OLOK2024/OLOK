@@ -13,7 +13,8 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
     "id": "1234",
     "domain": "domaine.domaine",
     "username": "john_doe",
-    "password": "password"
+    "password": "password",
+    "signature": "signature"
 }
 ```
 
@@ -22,8 +23,10 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
 {
     "id": "123456789",
     "name": "trousseau1",
+    "role": "favorite | default | normal",
     "description": "Ceci est une description",
-    "deletable": true or false
+    "deletable": true or false,
+    "editable": true or false,
     "keysIDs": [
         "keyId1",
         "keyId2"
@@ -36,7 +39,6 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
 {
     "id": "123456789123",
     "idOwner": "65431",
-    "role": "favorite | normal",
     "bunchOfKeysIDs": [
         "bunchOfKeysId1",
         "bunchOfKeysId2"
@@ -44,7 +46,7 @@ Un utilisateur a un porte-trousseau qui est composé de trousseaux de clés. Ce 
 }
 ```
 
-Proposition: l'utilisateur a le droit à 1 seul porte-trousseau favoris créé par défaut composé d'un seul trousseau et un porte-trousseau normal composé lui de plusieurs trousseaux.
+Proposition: l'utilisateur a le droit à 1 seul trousseau favoris créé par défaut et un porte-trousseau normal composé lui de plusieurs trousseaux.
 
 #### Frontend request
 
@@ -52,26 +54,22 @@ Pour le frontend on pourra renvoyer une structure plus conséquente mais complè
 
 ```json
 {
-    "id": "123456789123",
-    "idOwner": "65431",
-    "role": "normal",
-    "bunchOfKeysIDs": [
+    "bunchOfKeys": [
         {
             "id": "123456789",
             "name": "trousseau1",
             "description": "Ceci est une description",
-            "keysIDs": [
+            "role": "normal",
+            "keys": [
                 {
                     "id": "1234",
                     "domain": "domaine1.domaine",
                     "username": "john_doe",
-                    "password": "password1"
                 },
                 {
                     "id": "5678",
                     "domain": "domaine2.domaine",
                     "username": "john_doe",
-                    "password": "password2"
                 }
             ]
         },
@@ -79,18 +77,17 @@ Pour le frontend on pourra renvoyer une structure plus conséquente mais complè
             "id": "987654321",
             "name": "trousseau2",
             "description": "Ceci est une description",
-            "keysIDs": [
+            "role": "normal",
+            "keys": [
                 {
                     "id": "8765",
                     "domain": "domaine3.domaine",
                     "username": "john_doe",
-                    "password": "password3"
                 },
                 {
                     "id": "4321",
                     "domain": "domaine4.domaine",
                     "username": "john_doe",
-                    "password": "password4"
                 }
             ]
         }
