@@ -1,0 +1,63 @@
+<mxfile host="65bd71144e">
+    <diagram id="L_znGPQ4h5d_MfBLKFFr" name="Page-1">
+        <mxGraphModel dx="1900" dy="856" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="4" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="259" y="210" width="710" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="4">
+                    <mxGeometry x="-10" y="39.34426229508197" width="720" height="299.0163934426229" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Django API REST&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="4">
+                    <mxGeometry x="530" y="338.3606557377049" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="group" vertex="1" connectable="0" parent="4">
+                    <mxGeometry x="190.5" y="192.78688524590163" width="509" height="94.42622950819671" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;fillColor=none;dashed=1;strokeColor=#0000FF;" vertex="1" parent="12">
+                    <mxGeometry width="509" height="62.95081967213114" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="Endpoint authentifié par JWT" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" vertex="1" parent="12">
+                    <mxGeometry x="229" y="62.95081967213114" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="group" vertex="1" connectable="0" parent="12">
+                    <mxGeometry x="10" y="7.868852459016392" width="489" height="47.213114754098356" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Profile" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;fillColor=default;" vertex="1" parent="11">
+                    <mxGeometry width="149" height="47.213114754098356" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Clés" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;fillColor=default;" vertex="1" parent="11">
+                    <mxGeometry x="170" width="149" height="47.213114754098356" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Trousseau" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;fillColor=default;" vertex="1" parent="11">
+                    <mxGeometry x="340" width="149" height="47.213114754098356" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Authentification" style="rounded=0;whiteSpace=wrap;html=1;fontSize=20;fillColor=default;" vertex="1" parent="4">
+                    <mxGeometry x="10.5" y="200.65573770491804" width="149" height="47.213114754098356" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=20;startArrow=none;startFill=0;endArrow=classic;endFill=1;" edge="1" parent="4" source="13" target="8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=20;startArrow=none;startFill=0;endArrow=classic;endFill=1;" edge="1" parent="4" source="13" target="7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=20;startArrow=none;startFill=0;endArrow=classic;endFill=1;" edge="1" parent="4" source="13" target="5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=20;startArrow=none;startFill=0;endArrow=classic;endFill=1;" edge="1" parent="4" source="13" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="Middlewares" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fontSize=20;fillColor=default;" vertex="1" parent="4">
+                    <mxGeometry x="10.5" y="70.00081967213114" width="679" height="70.81967213114754" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="Requêtes" style="edgeStyle=none;html=1;fontSize=20;startArrow=classic;startFill=1;endArrow=none;endFill=0;" edge="1" parent="1" source="2">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="609" y="170" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
