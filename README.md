@@ -1,5 +1,3 @@
-i
-
 ### Représentation des données dans la base de donnée NoSQL
 
 La logique pour parvenir à la représentation en base de données des mots de passe de l'utilisateur est la suivante :
@@ -94,3 +92,100 @@ Pour le frontend on pourra renvoyer une structure plus conséquente mais complè
     ]
 }
 ```
+
+### Format des logs
+
+Les logs vont servir de données pour entrainer une IA sur le comportement des utilisateurs afin de lever des alertes en cas de variations. Ces logs se limiteront aux actions des utilisateurs, c'est-à-dire qu'on ne considère pas pour ces logs des tentatives frauduleuses comme le brute-force, ddos, etc... . Les formats selon l'action effectué sont les suivants:
+
+#### Logs concernant les clés
+
+##### Création d'une nouvelle clé
+
+```txt
+<Timestamp> new key in <bunchOfKeysId> with id <keyId> for user <userId>
+```
+
+##### Modification d'une clé
+
+```txt
+<Timestamp> modification of key <keyId> in <bunchOfKeysId> for user <userId>
+```
+
+##### Suppression d'une clé
+
+```txt
+<Timestamp> deletion of key <keyId> in <bunchOfKeysId> for user <userId>
+```
+
+##### Récupération d'une clé
+
+```txt
+<Timestamp> get key <keyId> from bunchOfKeys <bunchOfKeysId> for user <userId>
+```
+
+#### Logs concernant les porte-clés
+
+##### Création d'un porte clé
+
+```txt
+<Timestamp> new bunchOfKeys <bunchOfKeysId> for user <userId>
+```
+
+##### Modification d'un porte clé
+
+```txt
+<Timestamp> modification of bunchOfKeys <bunchOfKeysId> for user <userId>
+```
+
+##### Suppression d'un porte clé
+
+```txt
+<Timestamp> deletion of bunchOfKeys <bunchOfKeysId> for user <userId>
+```
+
+##### Suppression d'un porte clé
+
+```txt
+<Timestamp> get bunchOfKeys <bunchOfKeysId> for user <userId>
+```
+
+##### Changement clé de porte clé
+
+```txt
+<Timestamp> change key <keyId> spot from bunchOfKeys <bunchOfKeysId> to <bunchOfKeysId> for user <userId>
+```
+
+#### Logs concernant l'authentification'
+
+##### Création d'un compte
+
+```txt
+<Timestamp> creation of an account <userId> from <countryCode>
+```
+
+##### Connexion à un compte
+
+```txt
+<Timestamp> login account <userId> from <countryCode>
+```
+
+#### Logs concernant le profil
+
+##### Suppression d'un compte
+
+```txt
+<Timestamp> deletion of account <userId> from <countryCode>
+```
+
+##### Modification du profil
+
+```txt
+<Timestamp> modification data account <userId>
+```
+
+##### Changement de mot de passe
+
+```txt
+<Timestamp> modification password account <userId>
+```
+
