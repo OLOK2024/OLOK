@@ -15,6 +15,9 @@ RUN npm install -g @angular/cli
 # Install boostrap
 RUN npm install bootstrap
 
+# Install compatibility 
+RUN if [ "$(uname -m)" = "aarch64" ]; then npm i @rollup/rollup-linux-arm64-gnu; fi
+
 # Expose port 4200
 EXPOSE 4200
 

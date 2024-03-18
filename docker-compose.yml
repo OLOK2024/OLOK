@@ -10,7 +10,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./FrontEnd:/usr/local/app
+      - ./FrontEnd/:/usr/local/app
     ports:
       - "80:4200"
     networks:
