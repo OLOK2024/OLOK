@@ -49,7 +49,7 @@ class signup_view(APIView):
             client.close()
 
             # loggage de la création du compte
-            logger.info('creation of an account ' + str(serializer.data["id"]))
+            logger.info('new account ' + str(serializer.data["id"]))
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
