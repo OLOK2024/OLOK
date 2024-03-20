@@ -4,6 +4,9 @@ from rest_framework import status
 from .serializers import UserSerializer
 import tools.mongobd as mongo
 from drf_yasg.utils import swagger_auto_schema
+import logging
+
+logger = logging.getLogger('your_app_logger')
 
 class signup_view(APIView):
     @swagger_auto_schema(request_body=UserSerializer)
@@ -44,6 +47,9 @@ class signup_view(APIView):
 
             # Fermeture de la connexion à la base de données MongoDB
             client.close()
+
+            # loggage de la création du compte
+            logger.info('creation of an account ' + str(serializer.data["id"]))
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
