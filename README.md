@@ -99,28 +99,38 @@ Les logs vont servir de données pour entrainer une IA sur le comportement des u
 
 #### Logs concernant les clés
 
+Le format général des logs est le suivant :
+
+```txt
+<Timestamp> - <new | modif | del | get | login> - <userId> - <elmntId | data | password>
+```
+
 ##### Création d'une nouvelle clé
 
 ```txt
 <Timestamp> new key in <bunchOfKeysId> with id <keyId> for user <userId>
+<Timestamp> - new - <userId> - <keyId>
 ```
 
 ##### Modification d'une clé
 
 ```txt
 <Timestamp> modification of key <keyId> in <bunchOfKeysId> for user <userId>
+<Timestamp> - modif - <userId> - <keyId>
 ```
 
 ##### Suppression d'une clé
 
 ```txt
 <Timestamp> deletion of key <keyId> in <bunchOfKeysId> for user <userId>
+<Timestamp> - del - <userId> - <keyId>
 ```
 
 ##### Récupération d'une clé
 
 ```txt
 <Timestamp> get key <keyId> from bunchOfKeys <bunchOfKeysId> for user <userId>
+<Timestamp> - get - <userId> - <keyId>
 ```
 
 #### Logs concernant les porte-clés
@@ -129,30 +139,42 @@ Les logs vont servir de données pour entrainer une IA sur le comportement des u
 
 ```txt
 <Timestamp> new bunchOfKeys <bunchOfKeysId> for user <userId>
+<Timestamp> - new - <userId> - <bunchOfKeysId>
 ```
 
 ##### Modification d'un porte clé
 
 ```txt
 <Timestamp> modification of bunchOfKeys <bunchOfKeysId> for user <userId>
+<Timestamp> - modif - <userId> - <bunchOfKeysId>
 ```
 
 ##### Suppression d'un porte clé
 
 ```txt
 <Timestamp> deletion of bunchOfKeys <bunchOfKeysId> for user <userId>
+<Timestamp> - del - <userId> - <bunchOfKeysId>
 ```
 
 ##### Suppression d'un porte clé
 
 ```txt
 <Timestamp> get bunchOfKeys <bunchOfKeysId> for user <userId>
+<Timestamp> - del - <userId> - <bunchOfKeysId>
 ```
 
 ##### Changement clé de porte clé
 
 ```txt
 <Timestamp> change key <keyId> spot from bunchOfKeys <bunchOfKeysId> to <bunchOfKeysId> for user <userId>
+plus de log car info inutile
+```
+
+##### Récupération des portes clés
+
+```txt
+<Timestamp> getall bunchOfKeys for user <userId>
+plus de log car info inutile on redondant avec la connexion
 ```
 
 #### Logs concernant l'authentification'
@@ -161,12 +183,14 @@ Les logs vont servir de données pour entrainer une IA sur le comportement des u
 
 ```txt
 <Timestamp> creation of an account <userId> from <countryCode>
+plus de log car info apparait 1 fois inutile pour analyse comportementale
 ```
 
 ##### Connexion à un compte
 
 ```txt
 <Timestamp> login account <userId> from <countryCode>
+<Timestamp> - login - <userId> - <countryCode>
 ```
 
 #### Logs concernant le profil
@@ -175,17 +199,20 @@ Les logs vont servir de données pour entrainer une IA sur le comportement des u
 
 ```txt
 <Timestamp> deletion of account <userId> from <countryCode>
+plus de log car info apparait 1 fois inutile pour analyse comportementale
 ```
 
 ##### Modification du profil
 
 ```txt
 <Timestamp> modification data account <userId>
+<Timestamp> - modif - <userId> - data
 ```
 
 ##### Changement de mot de passe
 
 ```txt
 <Timestamp> modification password account <userId>
+<Timestamp> - modif - <userId> - password
 ```
 
