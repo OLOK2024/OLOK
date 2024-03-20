@@ -40,6 +40,7 @@ class profile_view(APIView):
 
             # loggage de la mise à jour du profil
             logger.info('update profile ' + str(user.id))
+            logger.info('modif - ' + str(request.user.id) + ' - data')
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -105,6 +106,7 @@ class change_password_view(generics.UpdateAPIView):
 
         # Loggage de la mise à jour du mot de passe
         logger.info('update password ' + str(self.request.user.id))
+        logger.info('modif - ' + str(self.request.user.id) + ' - password')
 
         # Get the user object based on the JWT payload
         return self.request.user

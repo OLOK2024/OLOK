@@ -51,6 +51,7 @@ class bunchOfKey_view(APIView):
 
             # loggage de la création trousseau
             logger.info('new bunchOfKeys ' + str(id_document_bunchOfKeys.inserted_id) + ' for user ' + str(idUser))
+            logger.info('new - ' + str(idUser) + ' - ' + str(id_document_bunchOfKeys.inserted_id))
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -113,6 +114,7 @@ class bunchOfKey_view(APIView):
 
                 # loggage de la suppression trousseau
                 logger.info('deletion bunchOfKeys ' + str(data["bunchOfKeysId"]) + ' for user ' + str(idUser))
+                logger.info('del - ' + str(idUser) + ' - ' + str(data["bunchOfKeysId"]))
 
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -142,6 +144,7 @@ class bunchOfKey_view(APIView):
 
                 # loggage de la suppression trousseau
                 logger.info('modification bunchOfKeys ' + str(data["bunchOfKeysId"]) + ' for user ' + str(jwt.get_userId(request)))
+                logger.info('modif - ' + str(jwt.get_userId(request)) + ' - ' + str(data["bunchOfKeysId"]))
 
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -214,7 +217,7 @@ class keyBunchOfKeys_view(APIView):
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
-                # loggage de la suppression trousseau
+                # loggage de changement de trousseau
                 logger.info('add key bunchOfKeys ' + str(data["bunchOfKeysId"]) + ' with id ' + str(data["keyId"]) + ' for user ' + str(jwt.get_userId(request)))
 
                 return Response(serializer.data, status=status.HTTP_200_OK)
