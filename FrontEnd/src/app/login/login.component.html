@@ -15,10 +15,10 @@
                     <input type="email" id="loginEmail" class="form-control" placeholder="Email address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required/>
                   </div>
                   <div class="form-outline mb-4 mx-3">
-                    <input type="password" id="loginPassword" class="form-control" placeholder="Password"/>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Password" required/>
                   </div>
                   <div class="text-center pt-1 mb-5 pb-1">
-                    <button class="btn btn-primary btn-block fa-lg mb-3 btn-lg" type="button">Log in</button>
+                    <button class="btn btn-primary btn-block fa-lg mb-3 btn-lg" type="button" (click)="login()">Log in</button>
                   </div>
                 </form>
               </div>
@@ -32,16 +32,16 @@
                   </div>
                   <div class="d-flex flex-wrap">
                     <div class="form-outline flex-fill mx-3">
-                      <input type="text" id="signInFirstName" class="form-control" placeholder="First name" />
+                      <input type="text" id="signInFirstName" class="form-control" placeholder="First name" required />
                     </div>
                     <div class="form-outline flex-fill mx-3">
-                      <input type="text" id="signInLastName" class="form-control" placeholder="Last name" />
+                      <input type="text" id="signInLastName" class="form-control" placeholder="Last name" required />
                     </div>
                   </div>
                   <div class="form-outline mb-2 mx-3">
                     <label class="form-label" for="signInCountry"> </label>
-                    <select class="form-select" id="signInCountry" aria-label="Default select example">
-                      <option selected> Select your country </option>
+                    <select class="form-select" id="signInCountry" aria-label="Default select example" required>
+                      <option value="" selected> Select your country </option>
                       <option value="AF">Afghanistan</option>
                       <option value="AX">Åland Islands</option>
                       <option value="AL">Albania</option>
@@ -296,27 +296,27 @@
                   <div class="d-flex flex-wrap">
                     <div class="form-outline flex-fill mb-4 mx-3">
                       <label class="form-label" for="signInStartTime">Start time</label>
-                      <input type="time" id="signInStartTime" class="form-control" />
+                      <input type="time" id="signInStartTime" class="form-control" required />
                     </div>
                     <div class="form-outline flex-fill mb-4 mx-3">
                       <label class="form-label" for="signInEndTime">End time</label>
-                      <input type="time" id="signInEndTime" class="form-control" />
+                      <input type="time" id="signInEndTime" class="form-control" required />
                     </div>
                     <div class="form-outline flex-fill mb-4 mx-3">
                       <label class="form-label" for="signInWorkDays">Number of work days</label>
-                      <input type="number" id="signInWorkDays" class="form-control" value="0" min="0" max="7"  />
+                      <input type="number" id="signInWorkDays" class="form-control" value="0" min="0" max="7" required />
                     </div>
                   </div>
                   <div class="d-flex flex-wrap">
                     <div class="form-outline flex-fill mb-4 mx-3">
-                      <input type="password" id="signInPassword" class="form-control" placeholder="Password"/>
+                      <input type="password" id="signInPassword" class="form-control" placeholder="Password" required/>
                     </div>
                     <div class="form-outline flex-fill mb-4 mx-3">
-                      <input type="password" id="signInPasswordConfirmed" class="form-control" placeholder="Confirm your password" />
+                      <input type="password" id="signInPasswordConfirmed" class="form-control" placeholder="Confirm your password" required />
                     </div>
                   </div>
                   <div class="text-center pt-1 mb-1 pb-1">
-                    <button class="btn btn-primary btn-block btn-lg fa-lg mb-3" type="button"> Register</button>
+                    <button class="btn btn-primary btn-block btn-lg fa-lg mb-3" type="button" (click)="signUp()"> Register</button>
                   </div>
                 </form>
               </div>
