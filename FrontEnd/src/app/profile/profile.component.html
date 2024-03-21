@@ -21,17 +21,17 @@
                           <!-- First Name -->
                           <div class="col-md-6">
                             <label class="form-label">First Name </label>
-                            <input type="text" class="form-control" placeholder="" aria-label="First name">
+                            <input type="text" class="form-control" id="profileFirstName" placeholder="" aria-label="First name">
                           </div>
                           <!-- Last name -->
                           <div class="col-md-6">
                             <label class="form-label">Last Name </label>
-                            <input type="text" class="form-control" placeholder="" aria-label="Last name">
+                            <input type="text" class="form-control" id="profileLastName" placeholder="" aria-label="Last name">
                           </div>
                           <!-- Country -->
                           <div class="col-md-12">
-                            <label class="form-label" for="signInCountry"> Country </label>
-                            <select class="form-select" id="signInCountry" aria-label="Default select example">
+                            <label class="form-label" for="profileCountry"> Country </label>
+                            <select class="form-select" id="profileCountry" aria-label="Default select example">
                               <option selected> </option>
                               <option value="AF">Afghanistan</option>
                               <option value="AX">Åland Islands</option>
@@ -291,13 +291,13 @@
                           </div>
                           <!-- End time -->
                           <div class="col-md-4">
-                            <label class="form-label" for="signInEndTime">End time</label>
-                            <input type="time" id="signInEndTime" class="form-control" />
+                            <label class="form-label" for="profileEndTime">End time</label>
+                            <input type="time" id="profileEndTime" class="form-control" />
                           </div>
                           <!-- Work days -->
                           <div class="col-md-4">
-                            <label class="form-label" for="signInWorkDays">Number of work days</label>
-                            <input type="number" id="signInWorkDays" class="form-control" value="0" min="0" max="7"  />
+                            <label class="form-label" for="profileWorkDays">Number of work days</label>
+                            <input type="number" id="profileWorkDays" class="form-control" value="0" min="0" max="7"  />
                           </div>
                         </div> <!-- Row END -->
                       </div>
@@ -309,18 +309,18 @@
                           <h2 class="my-2">Change Password</h2>
                           <!-- Old password -->
                           <div class="col-md-12">
-                            <label for="exampleInputPassword1" class="form-label">Old password *</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <label for="oldPassword" class="form-label">Old password *</label>
+                            <input type="password" class="form-control" id="oldPassword">
                           </div>
                           <!-- New password -->
                           <div class="col-md-12">
-                            <label for="exampleInputPassword2" class="form-label">New password *</label>
-                            <input type="password" class="form-control" id="exampleInputPassword2">
+                            <label for="newPassword" class="form-label">New password *</label>
+                            <input type="password" class="form-control" id="newPassword">
                           </div>
                           <!-- Confirm password -->
                           <div class="col-md-12">
-                            <label for="exampleInputPassword3" class="form-label">Confirm Password *</label>
-                            <input type="password" class="form-control" id="exampleInputPassword3">
+                            <label for="confirmNewPassword" class="form-label">Confirm Password *</label>
+                            <input type="password" class="form-control" id="confirmNewPassword">
                           </div>
                         </div>
                       </div>
