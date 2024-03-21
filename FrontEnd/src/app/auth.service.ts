@@ -33,7 +33,7 @@ export class AuthService {
 
 
   signUp(email: string, firstName: string, lastName: string, country: string, startTime: string, endTime: string, workDays: number, password: string, passwordConfirmed: string): Observable<any> {
-    const user = { email, firstName, lastName, country, startTime, endTime, workDays, password, passwordConfirmed };
+    const user = { email, firstName, lastName, password, passwordConfirmed, startTime, endTime, workDays, country};
     return this.http.post<any>(`${this.apiUrl}/auth/signup`, user).pipe(
       // enregistrez les informations de l'utilisateur connecté dans le service
       tap(user => this.setCurrentUser(user))
