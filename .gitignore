@@ -3,3 +3,5 @@ BackEnd/backend/*/__pycache__/*
 BackEnd/backend/db.sqlite3
 BackEnd/backend/*/migrations/*
 db_sql/db/*
+.vscode
+FrontEnd/

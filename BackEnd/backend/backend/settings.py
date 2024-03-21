@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middleware.keyshandler.VerifyLegitOwnerMiddleware',
-    'middleware.conditionnalaccess.VerifyVpnIdMiddleware'
+#    'middleware.conditionnalaccess.VerifyVpnIdMiddleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -131,6 +131,13 @@ LOGGING = {
             'filename': '/var/log/olok.log',  # Chemin vers le fichier de vos logs personnalisés
             'formatter': 'verbose'
         },
+        'socket': {
+            'level': 'INFO',
+            'class': 'logging.handlers.SocketHandler',
+            'host': '10.0.1.6',  # Adresse IP ou nom d'hôte du serveur distant
+            'port': 54321,  # Port sur lequel le serveur distant écoute
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django': {
@@ -139,7 +146,7 @@ LOGGING = {
             'propagate': False,
         },
         'your_app_logger': {
-            'handlers': ['custom_logs_handler'],
+            'handlers': ['custom_logs_handler', 'socket'],
             'level': 'INFO',
             'propagate': False,
         },

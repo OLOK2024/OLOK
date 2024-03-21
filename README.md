@@ -156,13 +156,6 @@ Le format général des logs est le suivant :
 <Timestamp> - del - <userId> - <bunchOfKeysId>
 ```
 
-##### Suppression d'un porte clé
-
-```txt
-<Timestamp> get bunchOfKeys <bunchOfKeysId> for user <userId>
-<Timestamp> - del - <userId> - <bunchOfKeysId>
-```
-
 ##### Changement clé de porte clé
 
 ```txt
