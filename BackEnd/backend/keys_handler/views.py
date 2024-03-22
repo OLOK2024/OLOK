@@ -8,6 +8,10 @@ from bson import ObjectId
 from .serializers import KeySerializer, InfoKeySerializer, AddKeySerializer, PutKeyUsernameSerializer, PutKeyPasswordSerializer, PutKeyDomainSerializer
 from drf_yasg.utils import swagger_auto_schema
 
+import logging
+
+logger = logging.getLogger('your_app_logger')
+
 # Create your views here.
 
 class key_view(APIView):
@@ -48,6 +52,9 @@ class key_view(APIView):
 
                 serializer.data.pop("password")
 
+                # loggage de la création de la clé
+                logger.info('new - ' + str(request.user.id) + ' - ' + str(id_document_key.inserted_id))
+
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -84,6 +91,9 @@ class key_view(APIView):
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
+                # loggage de la suppression de la clé
+                logger.info('del - ' + str(request.user.id) + ' - ' + keyId)
+
                 return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -113,6 +123,10 @@ class key_password_view(APIView):
 
             # Vérification de la validité du mot de passe
             if key["signature"]:
+
+                # loggage de la récupération du mot de passe
+                logger.info('get - ' + str(request.user.id) + ' - ' + keyId)
+
                 return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -156,6 +170,9 @@ class key_password_view(APIView):
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
+                # loggage de la mise à jour du mot de passe
+                logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -193,6 +210,9 @@ class key_username_view(APIView):
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
+                # loggage de la mise à jour du nom d'utilisateur
+                logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -228,6 +248,9 @@ class key_domain_view(APIView):
 
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
+
+                # loggage de la mise à jour du domaine
+                logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
 
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_404_NOT_FOUND)

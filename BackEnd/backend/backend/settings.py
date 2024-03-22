@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middleware.keyshandler.VerifyLegitOwnerMiddleware',
-    'middleware.conditionnalaccess.VerifyVpnIdMiddleware'
+#    'middleware.conditionnalaccess.VerifyVpnIdMiddleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -113,18 +113,51 @@ DATABASES = {
         'PORT': '5432',
         'USER': 'olok',
         'PASSWORD': 'olok',
-    },
-    #'user_data': {
-    #    'ENGINE': 'djongo',
-    #    'NAME': 'olok',
-    #    'ENFORCE_SCHEMA': False,
-    #    'CLIENT': {
-    #        'host': 'mongodb://10.0.1.4:27017',
-    #        'username': 'olok',
-    #        'password': 'olok',
-    #    }
-    #}
+    }
 }
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+        'custom_logs_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/olok.log',  # Chemin vers le fichier de vos logs personnalisés
+            'formatter': 'verbose'
+        },
+        'socket': {
+            'level': 'INFO',
+            'class': 'logging.handlers.SocketHandler',
+            'host': '10.0.1.6',  # Adresse IP ou nom d'hôte du serveur distant
+            'port': 54321,  # Port sur lequel le serveur distant écoute
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'your_app_logger': {
+            'handlers': ['custom_logs_handler', 'socket'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s - %(levelname)s - %(message)s'
+        },
+    },
+}
+
 
 
 # Password validation
