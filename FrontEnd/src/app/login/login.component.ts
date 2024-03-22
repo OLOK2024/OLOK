@@ -2,13 +2,16 @@ import { Component } from '@angular/core';
 import { AuthService } from "../auth.service";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  imports: [HttpClientModule], // Importe HttpClientModule ici
+  providers: [AuthService] // Ajoute AuthService aux providers
 })
 
 export class LoginComponent {
