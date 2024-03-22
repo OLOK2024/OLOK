@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  frontend:
+    restart: always
+    env_file:
+      - ./front.env
+    container_name: olok-frontend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./FrontEnd/:/usr/local/app
+    ports:
+      - "80:4200"
+    networks:
+      olok-net-frontend:
+        ipv4_address: 10.0.0.2
+
   backend:
     restart: always
     container_name: olok-backend
