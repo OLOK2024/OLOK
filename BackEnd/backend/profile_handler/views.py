@@ -39,7 +39,6 @@ class profile_view(APIView):
             user.save()
 
             # loggage de la mise à jour du profil
-            logger.info('update profile ' + str(user.id))
             logger.info('modif - ' + str(request.user.id) + ' - data')
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -92,9 +91,6 @@ class profile_view(APIView):
         user = User.objects.get(id=userId)
         serializer = PutProfileDataSerializer(user)
 
-        # loggage de la récupération du profil
-        logger.info('get profile ' + str(userId))
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class change_password_view(generics.UpdateAPIView):
@@ -105,7 +101,6 @@ class change_password_view(generics.UpdateAPIView):
     def get_object(self):
 
         # Loggage de la mise à jour du mot de passe
-        logger.info('update password ' + str(self.request.user.id))
         logger.info('modif - ' + str(self.request.user.id) + ' - password')
 
         # Get the user object based on the JWT payload

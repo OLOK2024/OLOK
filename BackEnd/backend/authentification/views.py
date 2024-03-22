@@ -48,8 +48,5 @@ class signup_view(APIView):
             # Fermeture de la connexion à la base de données MongoDB
             client.close()
 
-            # loggage de la création du compte
-            logger.info('new account ' + str(serializer.data["id"]))
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

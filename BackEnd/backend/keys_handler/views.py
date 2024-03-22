@@ -53,7 +53,6 @@ class key_view(APIView):
                 serializer.data.pop("password")
 
                 # loggage de la création de la clé
-                logger.info('new key ' + str(id_document_key.inserted_id) + ' in bunchOfKeys ' + bunchOfKeysId + ' for user ' + str(request.user.id))
                 logger.info('new - ' + str(request.user.id) + ' - ' + str(id_document_key.inserted_id))
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -93,7 +92,6 @@ class key_view(APIView):
                 client.close()
 
                 # loggage de la suppression de la clé
-                logger.info('delete key ' + keyId + ' in bunchOfKeys ' + bunchOfKeysId + ' for user ' + str(request.user.id))
                 logger.info('del - ' + str(request.user.id) + ' - ' + keyId)
 
                 return Response(status=status.HTTP_204_NO_CONTENT)
@@ -127,7 +125,6 @@ class key_password_view(APIView):
             if key["signature"]:
 
                 # loggage de la récupération du mot de passe
-                logger.info('get password key ' + keyId + ' in bunchOfKeys ' + bunchOfKeysId + ' for user ' + str(request.user.id))
                 logger.info('get - ' + str(request.user.id) + ' - ' + keyId)
 
                 return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
@@ -174,7 +171,6 @@ class key_password_view(APIView):
                 client.close()
 
                 # loggage de la mise à jour du mot de passe
-                logger.info('update password key ' + keyId + ' in bunchOfKeys ' + bunchOfKeysId + ' for user ' + str(request.user.id))
                 logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
 
                 return Response(status=status.HTTP_200_OK)
@@ -215,7 +211,6 @@ class key_username_view(APIView):
                 client.close()
 
                 # loggage de la mise à jour du nom d'utilisateur
-                logger.info('update username key ' + keyId + ' in bunchOfKeys ' + bunchOfKeysId + ' for user ' + str(request.user.id))
                 logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
 
                 return Response(status=status.HTTP_200_OK)
@@ -255,7 +250,6 @@ class key_domain_view(APIView):
                 client.close()
 
                 # loggage de la mise à jour du domaine
-                logger.info('update domain key ' + keyId + ' in bunchOfKeys ' + bunchOfKeysId + ' for user ' + str(request.user.id))
                 logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
 
                 return Response(status=status.HTTP_200_OK)

@@ -115,21 +115,18 @@ Le format général des logs est le suivant :
 ##### Modification d'une clé
 
 ```txt
-<Timestamp> modification of key <keyId> in <bunchOfKeysId> for user <userId>
 <Timestamp> - modif - <userId> - <keyId>
 ```
 
 ##### Suppression d'une clé
 
 ```txt
-<Timestamp> deletion of key <keyId> in <bunchOfKeysId> for user <userId>
 <Timestamp> - del - <userId> - <keyId>
 ```
 
 ##### Récupération d'une clé
 
 ```txt
-<Timestamp> get key <keyId> from bunchOfKeys <bunchOfKeysId> for user <userId>
 <Timestamp> - get - <userId> - <keyId>
 ```
 
@@ -138,35 +135,30 @@ Le format général des logs est le suivant :
 ##### Création d'un porte clé
 
 ```txt
-<Timestamp> new bunchOfKeys <bunchOfKeysId> for user <userId>
 <Timestamp> - new - <userId> - <bunchOfKeysId>
 ```
 
 ##### Modification d'un porte clé
 
 ```txt
-<Timestamp> modification of bunchOfKeys <bunchOfKeysId> for user <userId>
 <Timestamp> - modif - <userId> - <bunchOfKeysId>
 ```
 
 ##### Suppression d'un porte clé
 
 ```txt
-<Timestamp> deletion of bunchOfKeys <bunchOfKeysId> for user <userId>
 <Timestamp> - del - <userId> - <bunchOfKeysId>
 ```
 
 ##### Changement clé de porte clé
 
 ```txt
-<Timestamp> change key <keyId> spot from bunchOfKeys <bunchOfKeysId> to <bunchOfKeysId> for user <userId>
 plus de log car info inutile
 ```
 
 ##### Récupération des portes clés
 
 ```txt
-<Timestamp> getall bunchOfKeys for user <userId>
 plus de log car info inutile on redondant avec la connexion
 ```
 
@@ -175,14 +167,12 @@ plus de log car info inutile on redondant avec la connexion
 ##### Création d'un compte
 
 ```txt
-<Timestamp> creation of an account <userId> from <countryCode>
 plus de log car info apparait 1 fois inutile pour analyse comportementale
 ```
 
 ##### Connexion à un compte
 
 ```txt
-<Timestamp> login account <userId> from <countryCode>
 <Timestamp> - login - <userId> - <countryCode>
 ```
 
@@ -191,21 +181,18 @@ plus de log car info apparait 1 fois inutile pour analyse comportementale
 ##### Suppression d'un compte
 
 ```txt
-<Timestamp> deletion of account <userId> from <countryCode>
 plus de log car info apparait 1 fois inutile pour analyse comportementale
 ```
 
 ##### Modification du profil
 
 ```txt
-<Timestamp> modification data account <userId>
 <Timestamp> - modif - <userId> - data
 ```
 
 ##### Changement de mot de passe
 
 ```txt
-<Timestamp> modification password account <userId>
 <Timestamp> - modif - <userId> - password
 ```
 
