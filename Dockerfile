@@ -1,4 +1,4 @@
-FROM node:20.11.1
+FROM node:20.9.0
 
 # Set the working directory
 WORKDIR /usr/local/app
