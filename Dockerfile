@@ -1,23 +1,19 @@
-FROM node:20.11.1
+FROM node:20.9.0
 
 # Set the working directory
-WORKDIR /usr/local/app
+WORKDIR /usr/src/app
 
 # Add the source code to app
-COPY ./FrontEnd /usr/local/app/
-
-# Install all the dependencies
-RUN npm install
+COPY ./FrontEnd /usr/src/app/
 
 # Install angular CLI
 RUN npm install -g @angular/cli
 
+# Install all the dependencies
+RUN npm install
+
 # Install boostrap
 RUN npm install bootstrap
-
-# Install compatibility 
-RUN npm i -O @rollup/rollup-linux-arm64-gnu
-RUN npm i -O @rollup/rollup-darwin-arm64
 
 # Expose port 4200
 EXPOSE 4200

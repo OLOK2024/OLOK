@@ -10,8 +10,8 @@ import {HttpClientModule} from "@angular/common/http";
   templateUrl: './login.component.html',
   standalone: true,
   styleUrls: ['./login.component.css'],
-  imports: [HttpClientModule], // Importe HttpClientModule ici
-  providers: [AuthService] // Ajoute AuthService aux providers
+  imports: [HttpClientModule],
+  providers: [AuthService]
 })
 
 export class LoginComponent {
