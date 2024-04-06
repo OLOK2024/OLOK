@@ -16,7 +16,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     const credentials = { email, password };
-    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
+    return this.http.post(`${this.apiUrl}/auth/login/`, credentials).pipe(
       tap(user => this.setCurrentUser(user)),
       catchError(error => {
         // gérer l'erreur d'authentification ici
@@ -32,9 +32,9 @@ export class AuthService {
   }
 
 
-  signUp(email: string, firstName: string, lastName: string, country: string, startTime: string, endTime: string, workDays: number, password: string, passwordConfirmed: string): Observable<any> {
-    const user = { email, firstName, lastName, password, passwordConfirmed, startTime, endTime, workDays, country};
-    return this.http.post(`${this.apiUrl}/auth/signup`, user).pipe(
+  signUp(email: string, firstName: string, lastName: string, country: string, startTime: string, endTime: string, workDays: number, password: string, confirmed_password: string): Observable<any> {
+    const user = { email, firstName, lastName, password, confirmed_password, startTime, endTime, workDays, country};
+    return this.http.post(`${this.apiUrl}/auth/signup/`, user).pipe(
       // enregistrez les informations de l'utilisateur connecté dans le service
       tap(user => this.setCurrentUser(user))
     );
