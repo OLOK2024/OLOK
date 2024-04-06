@@ -40,6 +40,8 @@ services:
     container_name: db-nosql
     env_file:
       - ./db_nosql.env 
+    volumes:
+      - ./db_nosql/db:/data/db
     build:
       context: ./db_nosql
       dockerfile: Dockerfile
@@ -70,19 +72,19 @@ services:
       olok-net-backend:
         ipv4_address: 10.0.1.5
 
-  log-analysis:
-    restart: always
-    container_name: log-analysis
-    build:
-      context: ./BackEnd/logAnalysis/
-      dockerfile: Dockerfile
-    networks:
-      olok-net-backend:
-        ipv4_address: 10.0.1.6
-    ports:
-      - "54321:54321"
-    depends_on:
-      - backend
+  #log-analysis:
+  #  restart: always
+  #  container_name: log-analysis
+  #  build:
+  #    context: ./BackEnd/logAnalysis/
+  #    dockerfile: Dockerfile
+  #  networks:
+  #    olok-net-backend:
+  #      ipv4_address: 10.0.1.6
+  #  ports:
+  #    - "54321:54321"
+  #  depends_on:
+  #    - backend
 
 networks:
   olok-net-frontend:

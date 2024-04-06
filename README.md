@@ -108,7 +108,6 @@ Le format général des logs est le suivant :
 ##### Création d'une nouvelle clé
 
 ```txt
-<Timestamp> new key in <bunchOfKeysId> with id <keyId> for user <userId>
 <Timestamp> - new - <userId> - <keyId>
 ```
 
