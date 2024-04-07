@@ -35,6 +35,8 @@ services:
     depends_on:
       - db-nosql
       - db-sql
+      - frontend
+
 
   db-nosql:
     restart: always
