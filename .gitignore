@@ -7,3 +7,7 @@ db_sql/db/*
 db_nosql/db/*
 FrontEnd/node_modules
 FrontEnd/.angular
+BackEnd/logAnalysis/models/*
+BackEnd/logAnalysis/logs/*
+BackEnd/logAnalysis/tmp/*
+BackEnd/logAnalysis/__pycache__
