@@ -1,3 +1,15 @@
+### Initialisation
+
+#### Création de dossier pour le ML
+
+Avant tout premier démarrage du projet il est nécessaire de créer trois dossier à l'endroit suivant:
+
+```
+./BackEnd/logAnalysis/
+```
+
+Les dossiers à créer sont les suivants: `logs`, `models` et `tmp`
+
 ### Représentation des données dans la base de donnée NoSQL
 
 La logique pour parvenir à la représentation en base de données des mots de passe de l'utilisateur est la suivante :
@@ -194,4 +206,3 @@ plus de log car info apparait 1 fois inutile pour analyse comportementale
 ```txt
 <Timestamp> - modif - <userId> - password
 ```
-
