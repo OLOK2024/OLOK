@@ -72,19 +72,34 @@ services:
       olok-net-backend:
         ipv4_address: 10.0.1.5
 
-  #log-analysis:
-  #  restart: always
-  #  container_name: log-analysis
-  #  build:
-  #    context: ./BackEnd/logAnalysis/
-  #    dockerfile: Dockerfile
-  #  networks:
-  #    olok-net-backend:
-  #      ipv4_address: 10.0.1.6
-  #  ports:
-  #    - "54321:54321"
-  #  depends_on:
-  #    - backend
+  log-analysis:
+    restart: always
+    container_name: log-analysis
+    build:
+      context: ./BackEnd/logAnalysis/
+      dockerfile: Dockerfile
+    volumes:
+      - ./BackEnd/logAnalysis/logs:/app/logs:rw
+      - ./BackEnd/logAnalysis/models:/app/models:rw
+      - ./BackEnd/logAnalysis/tmp:/app/tmp:rw
+    networks:
+      olok-net-backend:
+        ipv4_address: 10.0.1.6
+    ports:
+      - "54321:54321"
+    depends_on:
+      - backend
+
+  maildev:
+    restart: always
+    container_name: maildev
+    image: maildev/maildev
+    networks:
+      olok-net-backend:
+        ipv4_address: 10.0.1.7
+    ports:
+      - "1080:1080"
+      - "1025:1025"
 
 networks:
   olok-net-frontend:
