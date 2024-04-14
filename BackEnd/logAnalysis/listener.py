@@ -3,6 +3,7 @@ import logging
 import logging.handlers
 import socketserver
 import struct
+import ml
 
 
 class LogRecordStreamHandler(socketserver.StreamRequestHandler):
@@ -28,11 +29,14 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
                 chunk = chunk + self.connection.recv(slen - len(chunk))
             obj = self.unPickle(chunk)
             record = logging.makeLogRecord(obj)
-            self.handleLogRecord(record)
+            log_level = logging.getLevelName(record.levelno)
+            log_date = record.asctime
+            ml.handler_log(f"{log_date} - {log_level} - {record.getMessage()}")
 
     def unPickle(self, data):
         return pickle.loads(data)
 
+    """
     def handleLogRecord(self, record):
         # if a name is specified, we use the named logger rather than the one
         # implied by the record.
@@ -46,6 +50,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
         # to do filtering, do it at the client end to save wasting
         # cycles and network bandwidth!
         logger.handle(record)
+    """
 
 class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
     """
