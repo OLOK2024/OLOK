@@ -13,7 +13,7 @@ def save_log(log, path):
     # Vérifier si le fichier existe déjà
     if not os.path.exists(path):
         # Créer le fichier s'il n'existe pas
-        with open(path, "w") as f:
+        with open(path, "x") as f:
             pass
 
     # Ouvrir le fichier en mode ajout et écrire le log
@@ -119,6 +119,7 @@ def predict(clf, log):
 # 1 - Entrainer le modèle
 # 2 - Prédire les anomalies
 def handler_log(log):
+    print("Log reçu: ", log)
     match = re.search(r"- (\d+) -", log)
     if match:
         # Récupération de l'ID
@@ -207,8 +208,8 @@ def handler_log(log):
         print("Aucun ID trouvé dans le log.")
     return
 
-log = "2024-04-11 17:53:24,861 - INFO - new - 3 - 6606decc5379a50c0e3185b3"
+#log = "2024-04-11 17:53:24,861 - INFO - new - 3 - 6606decc5379a50c0e3185b3"
 
-print(log.split(" - "))
+#print(log.split(" - "))
 
 #handler_log(log)
