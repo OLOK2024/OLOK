@@ -2,6 +2,8 @@ import smtplib
 import pymongo
 import psycopg2
 
+from bson import ObjectId
+
 # Définir les paramètres du serveur SMTP
 server = "10.0.1.7"
 port = 1025
@@ -62,7 +64,7 @@ def get_element(id):
     collection = db["bunchOfKeys"]
 
     # Récupérer l'élément correspondant à l'ID
-    document = collection.find_one({"_id": id})
+    document = collection.find_one({"_id": ObjectId(id)})
 
     # Vérification si un document a été trouvé
     if document is not None:
@@ -70,7 +72,7 @@ def get_element(id):
         return (True, document)
     else:
         collection = db["keys"]
-        document = collection.find_one({"_id": id})
+        document = collection.find_one({"_id": ObjectId(id)})
 
         if document is not None:
             return (False, document)
@@ -85,7 +87,7 @@ def send_mail(log):
     element_id = info[4]
     timestamp = info[0]
 
-    body_start = f"Le {timestamp} une action suspeccte a ete detecte ({action}) sur l'élément suivant:\n"
+    body_start = f"Le {timestamp} une action suspecte a ete detecte ({action}) sur l'element suivant:\n\n"
 
     # Récupération du destinataire
     to_addr = get_mail(user_id)
@@ -102,9 +104,9 @@ def send_mail(log):
         return
 
     if res[0]:
-        body_end = f"\tTrousseau de clés: {res[1]['name']}\n"
+        body_end = f"\t- Trousseau de cles: {res[1]['name']}\n"
     else:
-        body_end = f"\tClé du domaine: {res[1]['domain']}\n"
+        body_end = f"\t- Cle associe au domaine: {res[1]['domain']}\n"
         #body_end += f"\t\Utilisateur: {res[1]['username']}\n"
 
     body = body_start + body_end
@@ -119,4 +121,4 @@ def send_mail(log):
     with smtplib.SMTP(server, port) as smtp:
         smtp.sendmail(from_addr, to_addr, message_bytes)
 
-#send_mail("2024-04-11 17:53:24,861 - INFO - new - 3 - 6606decc5379a50c0e3185b3")
+#send_mail("2024-04-14 19:53:36,469 - INFO - new - 3 - 661c3440436d3145e8bac987")
