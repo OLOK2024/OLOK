@@ -11,4 +11,3 @@ BackEnd/logAnalysis/models/*
 BackEnd/logAnalysis/logs/*
 BackEnd/logAnalysis/tmp/*
 BackEnd/logAnalysis/__pycache__
-BackEnd/logAnalysis/benchmark
