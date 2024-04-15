@@ -78,10 +78,15 @@ def train_model(id):
 
     # Charger le fichier CSV dans un DataFrame
     df = pd.read_csv(csv_path, names=noms_colonnes, parse_dates=['Date'])
-    df['Date'] = df['Date'].astype(np.int64) / 10**9
+    #df['Date'] = df['Date'].astype(np.int64) / 10**9
+
+    df['Month'] = df['Date'].dt.month
+    df['Day'] = df['Date'].dt.day
+    df['Hour'] = df['Date'].dt.hour
+    df['Minute'] = df['Date'].dt.minute
 
     # Sélectionner les colonnes à utiliser
-    X = df[['Date', 'Action']]
+    X = df[['Month', 'Day', 'Hour', 'Minute', 'Action']]
 
     # Entraîner le modèle d'Isolation Forest
     clf = IsolationForest()
@@ -104,9 +109,14 @@ def predict(clf, log):
     noms_colonnes = ['Date', 'Action', 'ID']
 
     df = pd.read_csv("./tmp/predict.csv", names=noms_colonnes, parse_dates=['Date'])
-    df['Date'] = df['Date'].astype(np.int64) / 10**9
+    #df['Date'] = df['Date'].astype(np.int64) / 10**9
 
-    X = df[['Date', 'Action']]
+    df['Month'] = df['Date'].dt.month
+    df['Day'] = df['Date'].dt.day
+    df['Hour'] = df['Date'].dt.hour
+    df['Minute'] = df['Date'].dt.minute
+
+    X = df[['Month', 'Day', 'Hour', 'Minute', 'Action']]
 
     anomalie = clf.predict(X)
 
