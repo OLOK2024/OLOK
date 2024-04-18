@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from "../auth.service";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from "@angular/router";
-import {HttpClientModule} from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 
 
 @Component({
@@ -24,8 +24,13 @@ export class LoginComponent {
       next: () => {
         this.router.navigate(['/home']); // redirigez l'utilisateur vers la page d'accueil
       },
-      error: () => {
-        this.snackBar.open('Incorrect credentials', 'Close', { duration: 3000 });
+      error: (error) => {
+        if (error.status === 401) {
+          this.snackBar.open('Identifiants incorrects', 'Fermer', { duration: 3000 });
+          console.error('Une ERREUR s\'est produite : ', error);
+        } else {
+          console.error('Une erreur s\'est produite : ', error);
+        }
       }
     });
   }
