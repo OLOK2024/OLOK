@@ -10,7 +10,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./FrontEnd/:/usr/local/app
+      - ./FrontEnd/:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     ports:
       - "80:4200"
     networks:
@@ -34,6 +35,8 @@ services:
     depends_on:
       - db-nosql
       - db-sql
+      - frontend
+
 
   db-nosql:
     restart: always
@@ -112,3 +115,6 @@ networks:
       driver: default
       config:
         - subnet: 10.0.1.0/24
+
+volumes:
+  node_modules:
