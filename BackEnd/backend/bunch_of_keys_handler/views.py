@@ -8,6 +8,9 @@ from bson import ObjectId
 
 import tools.jwt as jwt
 import tools.mongobd as mongo
+import logging
+
+logger = logging.getLogger('your_app_logger')
 
 # Create your views here.
 
@@ -45,6 +48,9 @@ class bunchOfKey_view(APIView):
 
             # Fermeture de la connexion à la base de données MongoDB
             client.close()
+
+            # loggage de la création trousseau
+            logger.info('new - ' + str(idUser) + ' - ' + str(id_document_bunchOfKeys.inserted_id))
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -105,6 +111,9 @@ class bunchOfKey_view(APIView):
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
+                # loggage de la suppression trousseau
+                logger.info('del - ' + str(idUser) + ' - ' + str(data["bunchOfKeysId"]))
+
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -130,6 +139,9 @@ class bunchOfKey_view(APIView):
 
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
+
+                # loggage de la suppression trousseau
+                logger.info('modif - ' + str(jwt.get_userId(request)) + ' - ' + str(data["bunchOfKeysId"]))
 
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

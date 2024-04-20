@@ -4,6 +4,9 @@ from rest_framework import status
 from .serializers import UserSerializer
 import tools.mongobd as mongo
 from drf_yasg.utils import swagger_auto_schema
+import logging
+
+logger = logging.getLogger('your_app_logger')
 
 class signup_view(APIView):
     @swagger_auto_schema(request_body=UserSerializer)

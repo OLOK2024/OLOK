@@ -1,4 +1,14 @@
-i
+### Initialisation
+
+#### Création de dossier pour le ML
+
+Avant tout premier démarrage du projet il est nécessaire de créer trois dossier à l'endroit suivant:
+
+```
+./BackEnd/logAnalysis/
+```
+
+Les dossiers à créer sont les suivants: `logs`, `models` et `tmp`
 
 ### Représentation des données dans la base de donnée NoSQL
 
@@ -93,4 +103,106 @@ Pour le frontend on pourra renvoyer une structure plus conséquente mais complè
         }
     ]
 }
+```
+
+### Format des logs
+
+Les logs vont servir de données pour entrainer une IA sur le comportement des utilisateurs afin de lever des alertes en cas de variations. Ces logs se limiteront aux actions des utilisateurs, c'est-à-dire qu'on ne considère pas pour ces logs des tentatives frauduleuses comme le brute-force, ddos, etc... . Les formats selon l'action effectué sont les suivants:
+
+#### Logs concernant les clés
+
+Le format général des logs est le suivant :
+
+```txt
+<Timestamp> - <new | modif | del | get | login> - <userId> - <elmntId | data | password>
+```
+
+##### Création d'une nouvelle clé
+
+```txt
+<Timestamp> - new - <userId> - <keyId>
+```
+
+##### Modification d'une clé
+
+```txt
+<Timestamp> - modif - <userId> - <keyId>
+```
+
+##### Suppression d'une clé
+
+```txt
+<Timestamp> - del - <userId> - <keyId>
+```
+
+##### Récupération d'une clé
+
+```txt
+<Timestamp> - get - <userId> - <keyId>
+```
+
+#### Logs concernant les porte-clés
+
+##### Création d'un porte clé
+
+```txt
+<Timestamp> - new - <userId> - <bunchOfKeysId>
+```
+
+##### Modification d'un porte clé
+
+```txt
+<Timestamp> - modif - <userId> - <bunchOfKeysId>
+```
+
+##### Suppression d'un porte clé
+
+```txt
+<Timestamp> - del - <userId> - <bunchOfKeysId>
+```
+
+##### Changement clé de porte clé
+
+```txt
+plus de log car info inutile
+```
+
+##### Récupération des portes clés
+
+```txt
+plus de log car info inutile on redondant avec la connexion
+```
+
+#### Logs concernant l'authentification'
+
+##### Création d'un compte
+
+```txt
+plus de log car info apparait 1 fois inutile pour analyse comportementale
+```
+
+##### Connexion à un compte
+
+```txt
+<Timestamp> - login - <userId> - <countryCode>
+```
+
+#### Logs concernant le profil
+
+##### Suppression d'un compte
+
+```txt
+plus de log car info apparait 1 fois inutile pour analyse comportementale
+```
+
+##### Modification du profil
+
+```txt
+<Timestamp> - modif - <userId> - data
+```
+
+##### Changement de mot de passe
+
+```txt
+<Timestamp> - modif - <userId> - password
 ```
