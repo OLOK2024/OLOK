@@ -20,82 +20,90 @@ class key_view(APIView):
 
     @swagger_auto_schema(request_body=AddKeySerializer)
     def post(self, request):
-        data = request.data
-        serializer = KeySerializer(data=data)
 
-        bunchOfKeysId = data["bunchOfKeysId"]
+        try:
+            data = request.data
+            serializer = KeySerializer(data=data)
 
-        if serializer.is_valid():
-            # Ouverture d'une connexion à la base de données MongoDB
-            client = mongo.create_mongo_client()
-            db = client["olok"]
+            bunchOfKeysId = data["bunchOfKeysId"]
 
-            # Création d'une nouvelle clé
-            key = serializer.data
-            cipher_key = cipher.encrypt(key["password"])
-            key["password"] = cipher_key[0]
-            key["signature"] = cipher_key[1]
-            collection = db["keys"]
-            id_document_key = collection.insert_one(key)
+            if serializer.is_valid():
+                # Ouverture d'une connexion à la base de données MongoDB
+                client = mongo.create_mongo_client()
+                db = client["olok"]
 
-            # Vérification de la création de la clé
-            if id_document_key.inserted_id:
-                # Ajout de la clé dans le porte trousseau
-                collection = db["bunchOfKeys"]
-                collection.update_one(
-                    {"_id": ObjectId(bunchOfKeysId)},
-                    {"$push": {"keysIDs": id_document_key.inserted_id}}
-                )
+                # Création d'une nouvelle clé
+                key = serializer.data
+                cipher_key = cipher.encrypt(key["password"])
+                key["password"] = cipher_key[0]
+                key["signature"] = cipher_key[1]
+                collection = db["keys"]
+                id_document_key = collection.insert_one(key)
 
-                # Fermeture de la connexion à la base de données MongoDB
-                client.close()
+                # Vérification de la création de la clé
+                if id_document_key.inserted_id:
+                    # Ajout de la clé dans le porte trousseau
+                    collection = db["bunchOfKeys"]
+                    collection.update_one(
+                        {"_id": ObjectId(bunchOfKeysId)},
+                        {"$push": {"keysIDs": id_document_key.inserted_id}}
+                    )
 
-                serializer.data.pop("password")
+                    # Fermeture de la connexion à la base de données MongoDB
+                    client.close()
 
-                # loggage de la création de la clé
-                logger.info('new - ' + str(request.user.id) + ' - ' + str(id_document_key.inserted_id))
+                    serializer.data.pop("password")
 
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    # loggage de la création de la clé
+                    logger.info('new - ' + str(request.user.id) + ' - ' + str(id_document_key.inserted_id))
+
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @swagger_auto_schema(request_body=InfoKeySerializer)
     def delete(self, request):
-        data = request.data
-        serializer = InfoKeySerializer(data=data)
 
-        if serializer.is_valid():
+        try:
+            data = request.data
+            serializer = InfoKeySerializer(data=data)
 
-            bunchOfKeysId = data["bunchOfKeysId"]
-            keyId = data["keyId"]
+            if serializer.is_valid():
 
-            # Ouverture d'une connexion à la base de données MongoDB
-            client = mongo.create_mongo_client()
-            db = client["olok"]
+                bunchOfKeysId = data["bunchOfKeysId"]
+                keyId = data["keyId"]
 
-            # Vérification de l'existence de la clé
-            collection = db["bunchOfKeys"]
-            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+                # Ouverture d'une connexion à la base de données MongoDB
+                client = mongo.create_mongo_client()
+                db = client["olok"]
 
-            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-                # Suppression de la clé
-                collection = db["keys"]
-                collection.delete_one({"_id": ObjectId(keyId)})
-
-                # Suppression de la clé dans le porte trousseau
+                # Vérification de l'existence de la clé
                 collection = db["bunchOfKeys"]
-                collection.update_one(
-                    {"_id": ObjectId(bunchOfKeysId)},
-                    {"$pull": {"keysIDs": ObjectId(keyId)}}
-                )
+                bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-                # Fermeture de la connexion à la base de données MongoDB
-                client.close()
+                if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                    # Suppression de la clé
+                    collection = db["keys"]
+                    collection.delete_one({"_id": ObjectId(keyId)})
 
-                # loggage de la suppression de la clé
-                logger.info('del - ' + str(request.user.id) + ' - ' + keyId)
+                    # Suppression de la clé dans le porte trousseau
+                    collection = db["bunchOfKeys"]
+                    collection.update_one(
+                        {"_id": ObjectId(bunchOfKeysId)},
+                        {"$pull": {"keysIDs": ObjectId(keyId)}}
+                    )
 
-                return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+                    # Fermeture de la connexion à la base de données MongoDB
+                    client.close()
+
+                    # loggage de la suppression de la clé
+                    logger.info('del - ' + str(request.user.id) + ' - ' + keyId)
+
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class key_password_view(APIView):
 
@@ -103,44 +111,7 @@ class key_password_view(APIView):
 
     def get(self, request, bunchOfKeysId, keyId):
 
-        # Ouverture d'une connexion à la base de données MongoDB
-        client = mongo.create_mongo_client()
-        db = client["olok"]
-
-        # Vérification de l'existence de la clé
-        collection = db["bunchOfKeys"]
-        bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
-
-        if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-            # Récupération du mot de passe
-            collection = db["keys"]
-            key = collection.find_one({"_id": ObjectId(keyId)})
-            decipher_key = cipher.decrypt(key["password"], key["signature"])
-            key["password"] = decipher_key[0]
-
-            # Fermeture de la connexion à la base de données MongoDB
-            client.close()
-
-            # Vérification de la validité du mot de passe
-            if key["signature"]:
-
-                # loggage de la récupération du mot de passe
-                logger.info('get - ' + str(request.user.id) + ' - ' + keyId)
-
-                return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    @swagger_auto_schema(request_body=PutKeyPasswordSerializer)
-    def put(self, request):
-        data = request.data
-        serializer = PutKeyPasswordSerializer(data=data)
-
-        if serializer.is_valid():
-
-            bunchOfKeysId = data["bunchOfKeysId"]
-            keyId = data["keyId"]
-            newPassword = data["newPassword"]
-
+        try:
             # Ouverture d'une connexion à la base de données MongoDB
             client = mongo.create_mongo_client()
             db = client["olok"]
@@ -150,31 +121,75 @@ class key_password_view(APIView):
             bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
             if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-
-                # Chiffrement du nouveau mot de passe
-                cipher_key = cipher.encrypt(newPassword)
-
-                # Mise à jour du mot de passe
+                # Récupération du mot de passe
                 collection = db["keys"]
-                collection.update_one(
-                    {"_id": ObjectId(keyId)},
-                    {"$set": {"password": cipher_key[0]}}
-                )
-
-                # Mise à jour de la signature
-                collection.update_one(
-                    {"_id": ObjectId(keyId)},
-                    {"$set": {"signature": cipher_key[1]}
-                })
+                key = collection.find_one({"_id": ObjectId(keyId)})
+                decipher_key = cipher.decrypt(key["password"], key["signature"])
+                key["password"] = decipher_key[0]
 
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
-                # loggage de la mise à jour du mot de passe
-                logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+                # Vérification de la validité du mot de passe
+                if key["signature"]:
 
-                return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+                    # loggage de la récupération du mot de passe
+                    logger.info('get - ' + str(request.user.id) + ' - ' + keyId)
+
+                    return Response({"password": key.get("password")}, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @swagger_auto_schema(request_body=PutKeyPasswordSerializer)
+    def put(self, request):
+
+        try:
+            data = request.data
+            serializer = PutKeyPasswordSerializer(data=data)
+
+            if serializer.is_valid():
+
+                bunchOfKeysId = data["bunchOfKeysId"]
+                keyId = data["keyId"]
+                newPassword = data["newPassword"]
+
+                # Ouverture d'une connexion à la base de données MongoDB
+                client = mongo.create_mongo_client()
+                db = client["olok"]
+
+                # Vérification de l'existence de la clé
+                collection = db["bunchOfKeys"]
+                bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+
+                if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+
+                    # Chiffrement du nouveau mot de passe
+                    cipher_key = cipher.encrypt(newPassword)
+
+                    # Mise à jour du mot de passe
+                    collection = db["keys"]
+                    collection.update_one(
+                        {"_id": ObjectId(keyId)},
+                        {"$set": {"password": cipher_key[0]}}
+                    )
+
+                    # Mise à jour de la signature
+                    collection.update_one(
+                        {"_id": ObjectId(keyId)},
+                        {"$set": {"signature": cipher_key[1]}
+                    })
+
+                    # Fermeture de la connexion à la base de données MongoDB
+                    client.close()
+
+                    # loggage de la mise à jour du mot de passe
+                    logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+
+                    return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class key_username_view(APIView):
 
@@ -182,39 +197,43 @@ class key_username_view(APIView):
 
     @swagger_auto_schema(request_body=PutKeyUsernameSerializer)
     def put(self, request):
-        data = request.data
-        serializer = PutKeyUsernameSerializer(data=data)
 
-        if serializer.is_valid():
+        try:
+            data = request.data
+            serializer = PutKeyUsernameSerializer(data=data)
 
-            bunchOfKeysId = data["bunchOfKeysId"]
-            keyId = data["keyId"]
-            newUsername = data["newUsername"]
+            if serializer.is_valid():
 
-            # Ouverture d'une connexion à la base de données MongoDB
-            client = mongo.create_mongo_client()
-            db = client["olok"]
+                bunchOfKeysId = data["bunchOfKeysId"]
+                keyId = data["keyId"]
+                newUsername = data["newUsername"]
 
-            # Vérification de l'existence de la clé
-            collection = db["bunchOfKeys"]
-            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+                # Ouverture d'une connexion à la base de données MongoDB
+                client = mongo.create_mongo_client()
+                db = client["olok"]
 
-            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-                # Mise à jour du nom d'utilisateur
-                collection = db["keys"]
-                collection.update_one(
-                    {"_id": ObjectId(keyId)},
-                    {"$set": {"username": newUsername}}
-                )
+                # Vérification de l'existence de la clé
+                collection = db["bunchOfKeys"]
+                bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-                # Fermeture de la connexion à la base de données MongoDB
-                client.close()
+                if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                    # Mise à jour du nom d'utilisateur
+                    collection = db["keys"]
+                    collection.update_one(
+                        {"_id": ObjectId(keyId)},
+                        {"$set": {"username": newUsername}}
+                    )
 
-                # loggage de la mise à jour du nom d'utilisateur
-                logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+                    # Fermeture de la connexion à la base de données MongoDB
+                    client.close()
 
-                return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+                    # loggage de la mise à jour du nom d'utilisateur
+                    logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+
+                    return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class key_domain_view(APIView):
 
@@ -222,35 +241,39 @@ class key_domain_view(APIView):
 
     @swagger_auto_schema(request_body=PutKeyDomainSerializer)
     def put(self, request):
-        data = request.data
-        serializer = PutKeyDomainSerializer(data=data)
 
-        if serializer.is_valid():
-            bunchOfKeysId = data["bunchOfKeysId"]
-            keyId = data["keyId"]
-            newDomain = data["newDomain"]
+        try:
+            data = request.data
+            serializer = PutKeyDomainSerializer(data=data)
 
-            # Ouverture d'une connexion à la base de données MongoDB
-            client = mongo.create_mongo_client()
-            db = client["olok"]
+            if serializer.is_valid():
+                bunchOfKeysId = data["bunchOfKeysId"]
+                keyId = data["keyId"]
+                newDomain = data["newDomain"]
 
-            # Vérification de l'existence de la clé
-            collection = db["bunchOfKeys"]
-            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+                # Ouverture d'une connexion à la base de données MongoDB
+                client = mongo.create_mongo_client()
+                db = client["olok"]
 
-            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-                # Mise à jour du domaine
-                collection = db["keys"]
-                collection.update_one(
-                    {"_id": ObjectId(keyId)},
-                    {"$set": {"domain": newDomain}}
-                )
+                # Vérification de l'existence de la clé
+                collection = db["bunchOfKeys"]
+                bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
 
-                # Fermeture de la connexion à la base de données MongoDB
-                client.close()
+                if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                    # Mise à jour du domaine
+                    collection = db["keys"]
+                    collection.update_one(
+                        {"_id": ObjectId(keyId)},
+                        {"$set": {"domain": newDomain}}
+                    )
 
-                # loggage de la mise à jour du domaine
-                logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+                    # Fermeture de la connexion à la base de données MongoDB
+                    client.close()
 
-                return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+                    # loggage de la mise à jour du domaine
+                    logger.info('modif - ' + str(request.user.id) + ' - ' + keyId)
+
+                    return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

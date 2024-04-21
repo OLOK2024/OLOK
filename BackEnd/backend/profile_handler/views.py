@@ -20,78 +20,90 @@ class profile_view(APIView):
 
     @swagger_auto_schema(request_body=PutProfileDataSerializer)
     def put(self, request):
-        data = request.data
-        serializer = PutProfileDataSerializer(data=data)
 
-        if serializer.is_valid():
+        try:
+            data = request.data
+            serializer = PutProfileDataSerializer(data=data)
 
-            user = User.objects.get(id=jwt.get_userId(request))
+            if serializer.is_valid():
 
-            # Mise à jour des données
-            user.first_name = serializer.data["first_name"]
-            user.last_name = serializer.data["last_name"]
-            user.end_of_day = serializer.data["end_of_day"]
-            user.start_of_day = serializer.data["start_of_day"]
-            user.workdays = serializer.data["workdays"]
-            user.country_code = serializer.data["country_code"]
+                user = User.objects.get(id=jwt.get_userId(request))
 
-            # Sauvegarde des données
-            user.save()
+                # Mise à jour des données
+                user.first_name = serializer.data["first_name"]
+                user.last_name = serializer.data["last_name"]
+                user.end_of_day = serializer.data["end_of_day"]
+                user.start_of_day = serializer.data["start_of_day"]
+                user.workdays = serializer.data["workdays"]
+                user.country_code = serializer.data["country_code"]
 
-            # loggage de la mise à jour du profil
-            logger.info('modif - ' + str(request.user.id) + ' - data')
+                # Sauvegarde des données
+                user.save()
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                # loggage de la mise à jour du profil
+                logger.info('modif - ' + str(request.user.id) + ' - data')
+
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request):
 
-        userId = jwt.get_userId(request)
+        try:
 
-        # On se connecte à la base de données mongo
-        client = mongo.create_mongo_client()
-        db = client["olok"]
+            userId = jwt.get_userId(request)
 
-        # On récupère le porte trousseau holder
-        collection = db["bunchOfKeysHolders"]
-        bunchOfKeysHolder = collection.find_one({"idOwner": userId})
+            # On se connecte à la base de données mongo
+            client = mongo.create_mongo_client()
+            db = client["olok"]
 
-        # On supprime chaque trousseau
-        for bunchOfKeysId in bunchOfKeysHolder["bunchOfKeysIDs"]:
-            collection = db["bunchOfKeys"]
-            bunchOfKeys = collection.find_one({"_id": bunchOfKeysId})
+            # On récupère le porte trousseau holder
+            collection = db["bunchOfKeysHolders"]
+            bunchOfKeysHolder = collection.find_one({"idOwner": userId})
 
-            # On supprime les clés du trousseau
-            collection = db["keys"]
-            for keyId in bunchOfKeys["keysIDs"]:
-                collection.delete_one({"_id": keyId})
+            # On supprime chaque trousseau
+            for bunchOfKeysId in bunchOfKeysHolder["bunchOfKeysIDs"]:
+                collection = db["bunchOfKeys"]
+                bunchOfKeys = collection.find_one({"_id": bunchOfKeysId})
 
-            # On supprime le trousseau
-            collection = db["bunchOfKeys"]
-            collection.delete_one({"_id": bunchOfKeysId})
+                # On supprime les clés du trousseau
+                collection = db["keys"]
+                for keyId in bunchOfKeys["keysIDs"]:
+                    collection.delete_one({"_id": keyId})
 
-        # On supprime le porte trousseau holder
-        collection = db["bunchOfKeysHolders"]
-        collection.delete_one({"idOwner": userId})
+                # On supprime le trousseau
+                collection = db["bunchOfKeys"]
+                collection.delete_one({"_id": bunchOfKeysId})
 
-        # On se déconnecte de la base de données mongo
-        client.close()
+            # On supprime le porte trousseau holder
+            collection = db["bunchOfKeysHolders"]
+            collection.delete_one({"idOwner": userId})
 
-        # On supprime l'utilisateur
-        user = User.objects.get(id=userId)
-        user.delete()
+            # On se déconnecte de la base de données mongo
+            client.close()
 
-        # loggage de la suppression du compte
-        logger.info('delete account ' + str(userId))
+            # On supprime l'utilisateur
+            user = User.objects.get(id=userId)
+            user.delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            # loggage de la suppression du compte
+            logger.info('delete account ' + str(userId))
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
-        userId = jwt.get_userId(request)
-        user = User.objects.get(id=userId)
-        serializer = PutProfileDataSerializer(user)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            userId = jwt.get_userId(request)
+            user = User.objects.get(id=userId)
+            serializer = PutProfileDataSerializer(user)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class change_password_view(generics.UpdateAPIView):
 
