@@ -1,1 +1,38 @@
-<p>home works!</p>
+<section class="min-vw-100 min-vh-100" style="background-color: #050a30;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-12">
+        <div class="card rounded-3 text-black pb-4">
+          <div class="row g-0">
+            <div class="pt-3 pb-1 px-5 d-md-flex align-items-center justify-content-between">
+              <img src="assets/images/OLOK_cropped_2.png" style="width: 150px;" alt="logo">
+              <div>
+                <img src="assets/images/user.png" style="width: 60px; cursor: pointer;" alt="user" routerLink="/profile">
+              </div>
+            </div>
+            <div class="text-center">
+              <hr>
+            </div>
+            <div class="col-lg-3 d-flex align-items-center">
+              <div class="card-body p-3 md-2 text-center">
+                Hello
+              </div>
+            </div>
+            <div class="col-lg-9 border-start d-flex align-items-center">
+              <div class="card-body p-3 md-2 text-center">
+                <div class="password-key" *ngFor="let key of passwordKeys">
+                  <div class="domain">{{ key.domain }}</div>
+                  <div class="username">{{ key.username }}</div>
+                  <div class="password">{{ key.password }}</div>
+                  <div class="bunchOfKeysId">{{ key.bunchOfKeysId }}</div>
+                  <hr />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

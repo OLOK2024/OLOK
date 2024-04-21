@@ -3,6 +3,9 @@ import {Router, RouterOutlet} from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from "./profile/profile.component";
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { TokenInterceptor } from './token.interceptor';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +14,13 @@ import { ProfileComponent } from "./profile/profile.component";
   `,
   standalone: true,
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    HttpClientModule
   ],
-  styles: []
+  styles: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true,},
+  ]
 })
 
 export class AppComponent {

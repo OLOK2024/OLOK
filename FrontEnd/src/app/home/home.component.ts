@@ -1,12 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {RouterLink} from "@angular/router";
+import {KeyService} from "../key.service";
+import {NgForOf} from "@angular/common";
+import {HttpClientModule} from "@angular/common/http";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink,
+    NgForOf,
+    HttpClientModule
+  ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
+  providers: [KeyService]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  passwordKeys: any;
 
+  constructor(private keyService: KeyService) { }
+
+  ngOnInit(): void {
+    this.keyService.getPasswordKeys().subscribe({
+      next: (keys) => {
+        this.passwordKeys = keys;
+      },
+      error: (err) => {
+        console.error('Error fetching password keys:', err);
+      }
+    });
+  }
 }

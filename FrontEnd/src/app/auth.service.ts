@@ -48,5 +48,8 @@ export class AuthService {
   private setCurrentUser(user: any): void {
     // stockez les informations de l'utilisateur connecté dans le service
     this.currentUserSubject.next(user);
+    console.log(user);
+    // stockez le token d'accès dans le localStorage
+    localStorage.setItem('token', user.access);
   }
 }
