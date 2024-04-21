@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AuthService } from "../auth.service";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from "@angular/router";
-import { HttpClientModule } from "@angular/common/http";
 
 
 @Component({
@@ -10,7 +9,6 @@ import { HttpClientModule } from "@angular/common/http";
   templateUrl: './login.component.html',
   standalone: true,
   styleUrls: ['./login.component.css'],
-  imports: [HttpClientModule],
   providers: [AuthService]
 })
 

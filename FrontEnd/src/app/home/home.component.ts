@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {KeyService} from "../key.service";
 import {NgForOf} from "@angular/common";
-import {HttpClientModule} from "@angular/common/http";
 
 @Component({
   selector: 'app-home',
@@ -10,7 +9,6 @@ import {HttpClientModule} from "@angular/common/http";
   imports: [
     RouterLink,
     NgForOf,
-    HttpClientModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
