@@ -277,3 +277,29 @@ class key_domain_view(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception:
             return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class key_list_view(APIView):
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, bunchOfKeysId):
+        try:
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
+            collection = db["bunchOfKeys"]
+
+            # Récupérer le bunchOfKeys choisis par l'utilisateur
+            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+
+            # On récupère la liste d'id des clés
+            KeysIDs = bunchOfKeys.get("keysIDs", [])
+
+            result = mongo.create_KeysList(db, KeysIDs)
+
+            # Fermeture de la connexion à la base de données MongoDB
+            client.close()
+
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
