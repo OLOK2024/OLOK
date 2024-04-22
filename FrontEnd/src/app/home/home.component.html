@@ -15,11 +15,85 @@
             </div>
             <div class="col-lg-3 d-flex align-items-center">
               <div class="card-body p-3 md-2 text-center">
-                Hello
+                <div *ngFor="let bunchOfKey of bunchOfKeys">
+                  <pre>{{ bunchOfKey | json }}</pre>
+                  <p style="background-color: yellow; border: 1px solid red;">{{ bunchOfKey.name }}</p>
+                  <p>  </p>
+                  <p>{{ bunchOfKey.description }}</p>
+                  <!-- Ajoute des boutons pour modifier et supprimer le porte-clé -->
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBunchOfKeyModal">
+                  Create Bunch of Key
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="createBunchOfKeyModal" tabindex="-1" aria-labelledby="createBunchOfKeyModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form [formGroup]="createBunchOfKeyModalForm" (submit)="createBunchOfKey()">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="createBunchOfKeyModalLabel">Add New Key</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required formControlName="name">
+                          </div>
+                          <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" required formControlName="description">
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="col-lg-9 border-start d-flex align-items-center">
               <div class="card-body p-3 md-2 text-center">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKeyModal">
+                  Add Key
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="addKeyModal" tabindex="-1" aria-labelledby="addKeyModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form [formGroup]="addKeyForm" (submit)="onSubmit()">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addKeyModalLabel">Add New Key</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="mb-3">
+                            <label for="domain" class="form-label">Domain</label>
+                            <input type="text" class="form-control" id="domain" required formControlName="domain">
+                          </div>
+                          <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required formControlName="username">
+                          </div>
+                          <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required formControlName="password">
+                          </div>
+                          <div class="mb-3">
+                            <label for="bunchOfKeysId" class="form-label">Bunch of Keys ID</label>
+                            <input type="text" class="form-control" id="bunchOfKeysId" required formControlName="bunchOfKeysId">
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
                 <div class="password-key" *ngFor="let key of passwordKeys">
                   <div class="domain">{{ key.domain }}</div>
                   <div class="username">{{ key.username }}</div>

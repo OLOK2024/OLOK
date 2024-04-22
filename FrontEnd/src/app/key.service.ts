@@ -13,4 +13,8 @@ export class KeyService {
   getPasswordKeys(): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/bunchOfKeys`);
   }
+
+  addPasswordKey(key: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/key/`, key);
+  }
 }
