@@ -6,7 +6,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   console.log(token);
 
   // vérifie si le token existe
-  if (token) {
+  if (token && token != "undefined") {
     // clone la requête et ajoute le token dans l'en-tête Authorization
     const newReq = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${token}`),
