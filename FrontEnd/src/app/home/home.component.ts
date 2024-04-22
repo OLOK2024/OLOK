@@ -117,10 +117,11 @@ export class HomeComponent implements OnInit {
     }
   }
   deleteBunchOfKey(bunchOfKey: any): void {
-    this.bunchOfKeysService.deleteBunchOfKey(bunchOfKey[0].bunchOfKeysId, false).subscribe({
+    console.log('Deleting bunch of key:', bunchOfKey.bunchOfKeysId);
+    this.bunchOfKeysService.deleteBunchOfKey(bunchOfKey.bunchOfKeysId, false).subscribe({
       next: () => {
         console.log('Bunch of key deleted:', bunchOfKey);
-        const index = this.bunchOfKeys.findIndex((bunch) => bunch[0].bunchOfKeysId === bunchOfKey[0].bunchOfKeysId);
+        const index = this.bunchOfKeys.findIndex((bunch) => bunch.bunchOfKeysId === bunchOfKey.bunchOfKeysId);
         this.bunchOfKeys.splice(index, 1);
         this.bunchOfKeyToUpdate = null;
       },
