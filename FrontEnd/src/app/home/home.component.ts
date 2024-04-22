@@ -21,15 +21,19 @@ import { CommonModule } from "@angular/common";
 })
 export class HomeComponent implements OnInit {
   passwordKeys: any;
+  bunchOfKeys: any[] = [];
+  bunchOfKeyToUpdate: any = null;
   addKeyForm = new FormGroup({
     domain: new FormControl('', []),
     username: new FormControl('', []),
     password: new FormControl('', []),
     bunchOfKeysId: new FormControl('', []),
   });
-  bunchOfKeys: any[] = [];
-
   createBunchOfKeyModalForm = new FormGroup({
+    name: new FormControl('', []),
+    description: new FormControl('', []),
+  });
+  updateBunchOfKeyModalForm = new FormGroup({
     name: new FormControl('', []),
     description: new FormControl('', []),
   });
@@ -88,5 +92,42 @@ export class HomeComponent implements OnInit {
         }
       });
     }
+  }
+  selectBunchOfKeyForUpdate(bunchOfKey: any) {
+    this.bunchOfKeyToUpdate = bunchOfKey[0];
+    this.updateBunchOfKeyModalForm.patchValue({
+      name: bunchOfKey[0].name,
+      description: bunchOfKey[0].description,
+    });
+  }
+  updateBunchOfKey(): void {
+    if (this.updateBunchOfKeyModalForm.valid) {
+      this.bunchOfKeysService.updateBunchOfKey(this.updateBunchOfKeyModalForm.value.name ?? '', this.updateBunchOfKeyModalForm.value.description ?? '', this.bunchOfKeyToUpdate.bunchOfKeysId).subscribe({
+        next: (updatedBunchOfKey) => {
+          console.log('Bunch of key updated:', updatedBunchOfKey);
+          const index = this.bunchOfKeys.findIndex((bunch) => bunch[0].bunchOfKeysId === updatedBunchOfKey.bunchOfKeysId);
+          this.bunchOfKeys[index] = [updatedBunchOfKey];
+          //this.updateBunchOfKeyModalForm.reset();
+          this.bunchOfKeyToUpdate = null;
+        },
+        error: (err) => {
+          console.error('Error updating bunch of key:', err);
+        }
+      });
+    }
+  }
+  deleteBunchOfKey(bunchOfKey: any): void {
+    this.bunchOfKeysService.deleteBunchOfKey(bunchOfKey[0].bunchOfKeysId, false).subscribe({
+      next: () => {
+        console.log('Bunch of key deleted:', bunchOfKey);
+        const index = this.bunchOfKeys.findIndex((bunch) => bunch[0].bunchOfKeysId === bunchOfKey[0].bunchOfKeysId);
+        this.bunchOfKeys.splice(index, 1);
+        this.bunchOfKeyToUpdate = null;
+      },
+      error: (err) => {
+        console.error('Error deleting bunch of key:', err);
+      }
+    });
+
   }
 }

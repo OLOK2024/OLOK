@@ -19,12 +19,14 @@ export class BunchOfKeysService {
     return this.http.post<any>(`${this.apiUrl}/bunchOfKeys/`, bunchOfKey);
   }
 
-  updateBunchOfKey(bunchOfKeysId: string, name: string, description: string): Observable<any> {
-    const bunchOfKey = { name, description };
-    return this.http.put<any>(`${this.apiUrl}/bunchOfKeys/${bunchOfKeysId}/`, bunchOfKey);
+  updateBunchOfKey(name: string, description: string, bunchOfKeysId: string): Observable<any> {
+    const bunchOfKey = { bunchOfKeysId, name, description };
+    return this.http.put<any>(`${this.apiUrl}/bunchOfKeys/`, bunchOfKey);
   }
 
-  deleteBunchOfKey(bunchOfKeysId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/bunchOfKeys/${bunchOfKeysId}/`);
+  deleteBunchOfKey(bunchOfKeysId: string, contentDelete: boolean): Observable<any> {
+    const data = { bunchOfKeysId, contentDelete };
+    console.log(data);
+    return this.http.delete<any>(`${this.apiUrl}/bunchOfKeys/`, { body: data });
   }
 }
