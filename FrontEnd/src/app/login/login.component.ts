@@ -46,7 +46,18 @@ export class LoginComponent {
     const passwordConfirmed = (document.getElementById('signInPasswordConfirmed') as HTMLInputElement).value;
     this.authService.signUp(email, firstName, lastName, country, startTime, endTime, workDays, password, passwordConfirmed).subscribe({
       next: () => {
-        this.router.navigate(['/home']); // redirigez l'utilisateur vers la page d'accueil
+        // Réinitialisez les valeurs des champs à une chaîne vide
+        (document.getElementById('signInEmail') as HTMLInputElement).value = '';
+        (document.getElementById('signInFirstName') as HTMLInputElement).value = '';
+        (document.getElementById('signInLastName') as HTMLInputElement).value = '';
+        (document.getElementById('signInCountry') as HTMLSelectElement).value = '';
+        (document.getElementById('signInStartTime') as HTMLInputElement).value = '';
+        (document.getElementById('signInEndTime') as HTMLInputElement).value = '';
+        (document.getElementById('signInWorkDays') as HTMLInputElement).value = '';
+        (document.getElementById('signInPassword') as HTMLInputElement).value = '';
+        (document.getElementById('signInPasswordConfirmed') as HTMLInputElement).value = '';
+
+        this.router.navigate(['/login']); // redirigez l'utilisateur vers la page d'accueil
       },
       error: (error) => {
         this.snackBar.open(error, 'Close', { duration: 3000 }); // affichez le message d'erreur à l'utilisateur
