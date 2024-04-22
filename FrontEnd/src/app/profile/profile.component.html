@@ -26,7 +26,7 @@
                           <!-- Last name -->
                           <div class="col-md-6">
                             <label class="form-label">Last Name </label>
-                            <input type="text" class="form-control" id="profileLastName" placeholder="" aria-label="Last name">
+                            <input type="text" class="form-control" id="profileLastName" placeholder="" aria-label="Last name" >
                           </div>
                           <!-- Country -->
                           <div class="col-md-12">
@@ -286,8 +286,8 @@
                           </div>
                           <!-- Start time -->
                           <div class="col-md-4">
-                            <label class="form-label" for="signInStartTime">Start time</label>
-                            <input type="time" id="signInStartTime" class="form-control" />
+                            <label class="form-label" for="profileStartTime">Start time</label>
+                            <input type="time" id="profileStartTime" class="form-control" />
                           </div>
                           <!-- End time -->
                           <div class="col-md-4">
@@ -329,10 +329,11 @@
 
                   <!-- button -->
                   <div class="gap-3 mb-3 d-md-flex justify-content-between text-center">
-                    <button type="button" class="btn btn-secondary btn-lg" routerLink="/home">Back</button>
+                    <button type="button" class="btn btn-secondary btn-lg" (click)="backToDashboard()" >Back</button>
                     <div>
-                      <button type="button" class="btn btn-danger btn-lg me-4" >Delete profile</button>
-                      <button type="button" class="btn btn-primary btn-lg">Update profile</button>
+                      <button type="button" class="btn btn-danger btn-lg me-4" (click)="deleteProfile()" >Delete profile</button>
+                      <button type="button" class="btn btn-primary btn-lg me-4" (click)="updateProfile()">Update profile</button>
+                      <button type="button" class="btn btn-primary btn-lg" (click)="updatePassword()">Update password</button>
                     </div>
                   </div>
 
