@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {KeyService} from "../key.service";
 import {NgForOf} from "@angular/common";
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import {ReactiveFormsModule, FormGroup, FormControl} from '@angular/forms';
 import { BunchOfKeysService } from '../bunch-of-keys.service';
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   passwordKeys: any;
   bunchOfKeys: any[] = [];
   bunchOfKeyToUpdate: any = null;
+  keyToUpdate: any = null;
+  bunchOfKeyFromKeyToUpdate: any = null;
   selectedBunchOfKeyId: string = 'all';
   addKeyForm = new FormGroup({
     domain: new FormControl('', []),
@@ -38,7 +40,12 @@ export class HomeComponent implements OnInit {
   updateBunchOfKeyModalForm = new FormGroup({
     name: new FormControl('', []),
     description: new FormControl('', []),
-  }); 
+  });
+  updateKeyModalForm = new FormGroup({
+    domain: new FormControl('', []),
+    username: new FormControl('', []),
+    password: new FormControl('', []),
+  });
 
   constructor(
     private keyService: KeyService,
@@ -175,5 +182,46 @@ export class HomeComponent implements OnInit {
   }
   filterBunchOfKeySelected(bunchOfKeyId: string) {
     this.selectedBunchOfKeyId = bunchOfKeyId;
+  }
+  selectKeyForUpdate(key: any, bunchOfKey: any) {
+    this.keyToUpdate = key;
+    this.bunchOfKeyFromKeyToUpdate = bunchOfKey[0];
+    this.updateKeyModalForm.patchValue({
+      domain: key.domain,
+      username: key.username,
+      password: key.password
+    });
+  }
+
+  updateKey(keyId: string): void {
+    if (this.updateKeyModalForm.valid) {
+      const bunchOfKeysId = this.bunchOfKeyFromKeyToUpdate.bunchOfKeysId;
+      console.log('Updating key:', keyId);
+      console.log('Bunch of keys ID:', bunchOfKeysId);
+      this.keyService.updateKeyDomain(bunchOfKeysId, keyId, this.updateKeyModalForm.value.domain ?? '').subscribe({
+        next: () => {
+          console.log('Key domain updated');
+        },
+        error: (err) => {
+          console.error('Error updating key domain:', err);
+        }
+      });
+      this.keyService.updateKeyUsername(bunchOfKeysId, keyId, this.updateKeyModalForm.value.username ?? '').subscribe({
+        next: () => {
+          console.log('Key username updated');
+        },
+        error: (err) => {
+          console.error('Error updating key username:', err);
+        }
+      });
+      this.keyService.updateKeyPassword(bunchOfKeysId, keyId, this.updateKeyModalForm.value.password ?? '').subscribe({
+        next: () => {
+          console.log('Key password updated');
+        },
+        error: (err) => {
+          console.error('Error updating key password:', err);
+        }
+      });
+    }
   }
 }

@@ -38,7 +38,7 @@
                         <div class="modal-body">
                           <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" required formControlName="name">
+                              <input type="text" class="form-control" id="name" required formControlName="name">
                           </div>
                           <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
@@ -161,10 +161,40 @@
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" (click)="getPassword(key.keyId)">Copy password</a></li>
                           <li><a class="dropdown-item" (click)="deleteKey(key.keyId)">Delete key</a></li>
-                          <li><a class="dropdown-item" href="#">Modify key</a></li>
+                          <li><a class="dropdown-item" (click)="selectKeyForUpdate(key, bunchOfKey)" data-bs-toggle="modal" data-bs-target="#updateKeyModal">Update key</a></li>
                         </ul>
                       </div>
-
+                      <!-- Modal Update Key  -->
+                      <div class="modal fade" id="updateKeyModal" tabindex="-1" aria-labelledby="updateKeyModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <form [formGroup]="updateKeyModalForm" (submit)="updateKey(key.keyId)">
+                              <div class="modal-header">
+                                <h4 class="modal-title" id="updateKeyModalLabel">Update this Key</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="mb-3">
+                                  <label for="domain2" class="form-label">Domain</label>
+                                  <input type="text" class="form-control" id="domain2" formControlName="domain">
+                                </div>
+                                <div class="mb-3">
+                                  <label for="username2" class="form-label">Username</label>
+                                  <input type="text" class="form-control" id="username2" formControlName="username">
+                                </div>
+                                <div class="mb-3">
+                                  <label for="password2" class="form-label">Password</label>
+                                  <input type="password" class="form-control" id="password2" formControlName="password">
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
                       <!--<button type="button" class="btn btn-primary me-4" (click)="getPassword(key.keyId)">
                         copy password
                       </button>-->
