@@ -11,9 +11,9 @@ import { ProfileComponent } from "./profile/profile.component";
   `,
   standalone: true,
   imports: [
-    RouterOutlet
+    RouterOutlet,
   ],
-  styles: []
+  styles: [],
 })
 
 export class AppComponent {

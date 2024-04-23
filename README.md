@@ -1,4 +1,17 @@
+### Prérequis
+
+- Docker
+- Angular:20.9.0
+
 ### Initialisation
+
+#### Initialisation angular
+
+Avant de lancer le projet il est impératif d'installer les modules angular. Pour cela dans le dossier FrontEnd lancez la commande suivante :
+
+```
+npm i
+```
 
 #### Création de dossier pour le ML
 
@@ -9,6 +22,25 @@ Avant tout premier démarrage du projet il est nécessaire de créer trois dossi
 ```
 
 Les dossiers à créer sont les suivants: `logs`, `models` et `tmp`
+
+### Démarrage
+
+Pour lancer le projet il suffit d'éxecuter cette commande :
+
+```
+docker compose up
+```
+
+#### Interfaces web
+
+- frontend : `localhost`
+- backend : `localhost:8000/swagger`
+- mail : `localhost:1080`
+
+#### Bases de données
+
+- mongoDB : `port : 27017`
+- postgreSQL : `port : 5432`
 
 ### Représentation des données dans la base de donnée NoSQL
 
@@ -184,7 +216,7 @@ plus de log car info apparait 1 fois inutile pour analyse comportementale
 ##### Connexion à un compte
 
 ```txt
-<Timestamp> - login - <userId> - <countryCode>
+Possibilité de log : <Timestamp> - login - <userId> - <countryCode>
 ```
 
 #### Logs concernant le profil
@@ -198,11 +230,11 @@ plus de log car info apparait 1 fois inutile pour analyse comportementale
 ##### Modification du profil
 
 ```txt
-<Timestamp> - modif - <userId> - data
+Possibilité de log : <Timestamp> - modif - <userId> - data
 ```
 
 ##### Changement de mot de passe
 
 ```txt
-<Timestamp> - modif - <userId> - password
+Possibilité de log : <Timestamp> - modif - <userId> - password
 ```
