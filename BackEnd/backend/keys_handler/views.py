@@ -52,12 +52,16 @@ class key_view(APIView):
                     # Fermeture de la connexion à la base de données MongoDB
                     client.close()
 
-                    serializer.data.pop("password")
+                    key.pop("password")
+                    key.pop("signature")
+                    key.pop("_id")
+                    key["keyId"] = str(id_document_key.inserted_id)
+                    print(key)
 
                     # loggage de la création de la clé
                     logger.info('new - ' + str(request.user.id) + ' - ' + str(id_document_key.inserted_id))
 
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(key, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

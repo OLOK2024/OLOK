@@ -66,6 +66,14 @@ export class HomeComponent implements OnInit {
           console.log('New key added:', key);
           this.passwordKeys.push(key);
           this.addKeyForm.reset();
+          // Trouver le bunchOfKeysId correspondant
+          for (let bunchOfKey of this.bunchOfKeys) {
+            console.log('Bunch of key:', bunchOfKey);
+            if (bunchOfKey.bunchOfKeysId == this.addKeyForm.value.bunchOfKeysId) {
+              bunchOfKey[0].keys.push(key);
+              console.log('Bunch of keys:', this.bunchOfKeys);
+            }
+          }
         },
         error: (err) => {
           console.error('Error adding new key:', err);
