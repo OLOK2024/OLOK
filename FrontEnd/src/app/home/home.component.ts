@@ -5,6 +5,7 @@ import {NgForOf} from "@angular/common";
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { BunchOfKeysService } from '../bunch-of-keys.service';
 import { CommonModule } from "@angular/common";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -37,12 +38,11 @@ export class HomeComponent implements OnInit {
     name: new FormControl('', []),
     description: new FormControl('', []),
   });
-  passwords: Map<string, string> = new Map<string, string>();
-
 
   constructor(
     private keyService: KeyService,
-    private bunchOfKeysService: BunchOfKeysService
+    private bunchOfKeysService: BunchOfKeysService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,19 +50,6 @@ export class HomeComponent implements OnInit {
       next: (bunchOfKeys) => {
         this.bunchOfKeys = bunchOfKeys;
         console.log('Bunch of keys:', this.bunchOfKeys);
-        bunchOfKeys.forEach((bunchOfKey) => {
-          bunchOfKey[0].keys.forEach((key:any) => {
-            console.log('ID_BoK',bunchOfKey[0].bunchOfKeysId,'ID_K', key.keyId)
-            this.keyService.getPassword(bunchOfKey[0].bunchOfKeysId, key.keyId).subscribe({
-              next: (password) => {
-                this.passwords.set(key.keyId, password);
-              },
-              error: (err) => {
-                console.error('Error fetching password:', err);
-              }
-            });
-          });
-        });
       },
       error: (err) => {
         console.error('Error fetching bunch of keys:', err);
@@ -83,6 +70,33 @@ export class HomeComponent implements OnInit {
         }
       });
     }
+  }
+
+  getPassword(keyId: string): void {
+    for (let bunchOfKey of this.bunchOfKeys[0]) {
+      for (let key of bunchOfKey.keys) {
+        if (key.keyId == keyId) {
+          alert(bunchOfKey.bunchOfKeysId);
+          this.keyService.getPassword(bunchOfKey.bunchOfKeysId, keyId).subscribe({
+            next: (password) => {
+              navigator.clipboard.writeText(password.password).then(() => {
+                console.log('Password copied to clipboard:', password.password);
+              });
+            },
+            error: (err) => {
+              console.error('Error fetching password:', err);
+            }
+          });
+
+        }
+      }
+    }
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    //renvoie vers la page de login
+    this.router.navigate(['/login']);
   }
 
   createBunchOfKey(): void {

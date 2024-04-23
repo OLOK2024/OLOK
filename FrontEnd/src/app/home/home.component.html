@@ -7,6 +7,9 @@
             <div class="pt-3 pb-1 px-5 d-md-flex align-items-center justify-content-between">
               <img src="assets/images/OLOK_cropped_2.png" style="width: 150px;" alt="logo">
               <div>
+                <button type="button" class="btn btn-primary me-4" (click)="logout()">
+                  Logout
+                </button>
                 <img src="assets/images/user.png" style="width: 60px; cursor: pointer;" alt="user" routerLink="/profile">
               </div>
             </div>
@@ -137,7 +140,11 @@
                   <div class="row mb-2" *ngFor="let key of bunchOfKey[0].keys">
                     <div class="col">{{ key.domain }}</div>
                     <div class="col">{{ key.username }}</div>
-                    <div class="col">{{ passwords.get(key.keyId) }}</div>
+                    <div class="col">
+                      <button type="button" class="btn btn-primary me-4" (click)="getPassword(key.keyId)">
+                        copy password
+                      </button>
+                    </div>
                     <hr class="mt-4 mb-3"/>
                   </div>
                 </div>
