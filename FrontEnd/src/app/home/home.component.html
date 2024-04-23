@@ -141,9 +141,19 @@
                     <div class="col">{{ key.domain }}</div>
                     <div class="col">{{ key.username }}</div>
                     <div class="col">
-                      <button type="button" class="btn btn-primary me-4" (click)="getPassword(key.keyId)">
+                      <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Actions
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" (click)="getPassword(key.keyId)">Copy password</a></li>
+                          <li><a class="dropdown-item" href="#">Delete key</a></li>
+                          <li><a class="dropdown-item" href="#">Modify key</a></li>
+                        </ul>
+                      </div>
+                      <!--<button type="button" class="btn btn-primary me-4" (click)="getPassword(key.keyId)">
                         copy password
-                      </button>
+                      </button>-->
                     </div>
                     <hr class="mt-4 mb-3"/>
                   </div>
