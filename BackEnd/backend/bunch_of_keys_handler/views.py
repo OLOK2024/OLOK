@@ -48,13 +48,19 @@ class bunchOfKey_view(APIView):
                         {"$push": {"bunchOfKeysIDs": id_document_bunchOfKeys.inserted_id}}
                     )
 
+                collection = db["bunchOfKeys"]
+
+                # Récupération du trousseau qui vient d'être créé
+                newBunchOfKeys = mongo.create_BunchOfKeysData(db, id_document_bunchOfKeys.inserted_id)
+                print(newBunchOfKeys)
+
                 # Fermeture de la connexion à la base de données MongoDB
                 client.close()
 
                 # loggage de la création trousseau
                 logger.info('new - ' + str(idUser) + ' - ' + str(id_document_bunchOfKeys.inserted_id))
 
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(newBunchOfKeys, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

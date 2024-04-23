@@ -126,6 +126,7 @@ export class HomeComponent implements OnInit {
         next: (bunchOfKey) => {
           console.log('New bunch of key added:', bunchOfKey);
           this.bunchOfKeys.push(bunchOfKey);
+          console.log('Bunch of keys:', this.bunchOfKeys);
           this.createBunchOfKeyModalForm.reset();
         },
         error: (err) => {
