@@ -24,3 +24,15 @@ p {
   color: #050a30;
   border: none;
 }
+
+.btn-dark:hover {
+  background-color: #050a30;
+  color: #f8b858;
+  border: none;
+}
+
+.btn-dark {
+  background-color: #050a30;
+    color: #ffffff;
+  border: none;
+}
