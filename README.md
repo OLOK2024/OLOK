@@ -3,11 +3,77 @@
 - Docker
 - Angular:20.9.0
 
+#### Installation 
+
+##### Windows
+
+```
+Docker => installation de docker desktop : https://docs.docker.com/desktop/install/windows-install/
+Node => https://nodejs.org/en
+```
+
+Pour l'installation d'angular sur powershell:
+
+```
+npm install -g @angular/cli
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+##### Ubuntu
+
+Installation de docker (https://docs.docker.com/engine/install/ubuntu/)
+```
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+Installation de node et angular
+```
+sudo apt update
+sudo apt install nodejs
+sudo apt install npm
+
+Angular :
+npm install -g @angular/cli
+```
+
+##### MacOS
+
+Installation de docker => https://docs.docker.com/desktop/install/mac-install/
+
+Installation de Node
+```
+# download and install Node.js
+brew install node@20
+
+# verifies the right Node.js version is in the environment
+node -v # should print `v20.12.2`
+
+# verifies the right NPM version is in the environment
+npm -v # should print `10.5.0`
+```
+
+Installation de Angular
+```
+npm install -g @angular/cli
+```
+
 ### Initialisation
 
 #### Initialisation angular
 
-Avant de lancer le projet il est impératif d'installer les modules angular. Pour cela dans le dossier FrontEnd lancez la commande suivante :
+Avant de lancer le projet il est impératif d'installer les modules angular. Pour cela dans le dossier `FrontEnd` lancez la commande suivante :
 
 ```
 npm i
@@ -24,6 +90,11 @@ Avant tout premier démarrage du projet il est nécessaire de créer trois dossi
 Les dossiers à créer sont les suivants: `logs`, `models` et `tmp`
 
 ### Démarrage
+
+Pour le premier démarrage:
+```
+docker compose up --build
+```
 
 Pour lancer le projet il suffit d'éxecuter cette commande :
 
