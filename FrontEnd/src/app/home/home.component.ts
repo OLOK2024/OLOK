@@ -79,6 +79,7 @@ export class HomeComponent implements OnInit {
             if (bunchOfKey.bunchOfKeysId == this.addKeyForm.value.bunchOfKeysId) {
               bunchOfKey[0].keys.push(key);
               console.log('Bunch of keys:', this.bunchOfKeys);
+              break;
             }
           }
         },
@@ -90,10 +91,10 @@ export class HomeComponent implements OnInit {
   }
 
   getPassword(keyId: string): void {
-    for (let bunchOfKey of this.bunchOfKeys[0]) {
-      for (let key of bunchOfKey.keys) {
+    for (let bunchOfKey of this.bunchOfKeys) {
+      for (let key of bunchOfKey[0].keys) {
         if (key.keyId == keyId) {
-          this.keyService.getPassword(bunchOfKey.bunchOfKeysId, keyId).subscribe({
+          this.keyService.getPassword(bunchOfKey[0].bunchOfKeysId, keyId).subscribe({
             next: (password) => {
               navigator.clipboard.writeText(password.password).then(() => {
                 console.log('Password copied to clipboard:', password.password);
@@ -103,12 +104,12 @@ export class HomeComponent implements OnInit {
               console.error('Error fetching password:', err);
             }
           });
+          break;
 
         }
       }
     }
-  }
-
+  } 
   logout(): void {
     localStorage.removeItem('token');
     //renvoie vers la page de login
@@ -116,20 +117,20 @@ export class HomeComponent implements OnInit {
   }
 
   deleteKey(keyId: string): void {
-    for (let bunchOfKey of this.bunchOfKeys[0]) {
-      for (let key of bunchOfKey.keys) {
+    for (let bunchOfKey of this.bunchOfKeys) {
+      for (let key of bunchOfKey[0].keys) {
         if (key.keyId == keyId) {
-          this.keyService.deleteKey(bunchOfKey.bunchOfKeysId, keyId).subscribe({
+          this.keyService.deleteKey(bunchOfKey[0].bunchOfKeysId, keyId).subscribe({
             next: () => {
               console.log('Key deleted:', key);
-              const index = bunchOfKey.keys.findIndex((k:any) => k.keyId === keyId);
-              bunchOfKey.keys.splice(index, 1);
+              const index = bunchOfKey[0].keys.findIndex((k:any) => k.keyId === keyId);
+              bunchOfKey[0].keys.splice(index, 1);
             },
             error: (err) => {
               console.error('Error deleting key:', err);
             }
           });
-
+          break;
         }
       }
     }
