@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   passwordKeys: any;
   bunchOfKeys: any[] = [];
   bunchOfKeyToUpdate: any = null;
+  selectedBunchOfKeyId: string = 'all';
   addKeyForm = new FormGroup({
     domain: new FormControl('', []),
     username: new FormControl('', []),
@@ -151,5 +152,8 @@ export class HomeComponent implements OnInit {
         }
       });
     }
+  }
+  filterBunchOfKeySelected(bunchOfKeyId: string) {
+    this.selectedBunchOfKeyId = bunchOfKeyId;
   }
 }
