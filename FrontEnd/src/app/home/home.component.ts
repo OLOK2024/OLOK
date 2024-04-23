@@ -37,6 +37,8 @@ export class HomeComponent implements OnInit {
     name: new FormControl('', []),
     description: new FormControl('', []),
   });
+  passwords: Map<string, string> = new Map<string, string>();
+
 
   constructor(
     private keyService: KeyService,
@@ -44,19 +46,23 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.keyService.getPasswordKeys().subscribe({
-      next: (keys) => {
-        this.passwordKeys = keys;
-      },
-      error: (err) => {
-        console.error('Error fetching password keys:', err);
-      }
-    });
-
     this.bunchOfKeysService.getBunchOfKeys().subscribe({
       next: (bunchOfKeys) => {
         this.bunchOfKeys = bunchOfKeys;
         console.log('Bunch of keys:', this.bunchOfKeys);
+        bunchOfKeys.forEach((bunchOfKey) => {
+          bunchOfKey[0].keys.forEach((key:any) => {
+            console.log('ID_BoK',bunchOfKey[0].bunchOfKeysId,'ID_K', key.keyId)
+            this.keyService.getPassword(bunchOfKey[0].bunchOfKeysId, key.keyId).subscribe({
+              next: (password) => {
+                this.passwords.set(key.keyId, password);
+              },
+              error: (err) => {
+                console.error('Error fetching password:', err);
+              }
+            });
+          });
+        });
       },
       error: (err) => {
         console.error('Error fetching bunch of keys:', err);
@@ -117,18 +123,19 @@ export class HomeComponent implements OnInit {
     }
   }
   deleteBunchOfKey(bunchOfKey: any): void {
-    console.log('Deleting bunch of key:', bunchOfKey.bunchOfKeysId);
-    this.bunchOfKeysService.deleteBunchOfKey(bunchOfKey.bunchOfKeysId, false).subscribe({
-      next: () => {
-        console.log('Bunch of key deleted:', bunchOfKey);
-        const index = this.bunchOfKeys.findIndex((bunch) => bunch.bunchOfKeysId === bunchOfKey.bunchOfKeysId);
-        this.bunchOfKeys.splice(index, 1);
-        this.bunchOfKeyToUpdate = null;
-      },
-      error: (err) => {
-        console.error('Error deleting bunch of key:', err);
-      }
-    });
-
+    if (confirm('Are you sure you want to delete this bunch of key?')) {
+      console.log('Deleting bunch of key:', bunchOfKey.bunchOfKeysId);
+      this.bunchOfKeysService.deleteBunchOfKey(bunchOfKey.bunchOfKeysId, false).subscribe({
+        next: () => {
+          console.log('Bunch of key deleted:', bunchOfKey);
+          const index = this.bunchOfKeys.findIndex((bunch) => bunch.bunchOfKeysId === bunchOfKey.bunchOfKeysId);
+          this.bunchOfKeys.splice(index, 1);
+          this.bunchOfKeyToUpdate = null;
+        },
+        error: (err) => {
+          console.error('Error deleting bunch of key:', err);
+        }
+      });
+    }
   }
 }

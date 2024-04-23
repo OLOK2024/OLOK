@@ -10,11 +10,11 @@ export class KeyService {
 
   constructor(private http: HttpClient) { }
 
-  getPasswordKeys(): Observable<any> {
-    return this.http.get<any[]>(`${this.apiUrl}/bunchOfKeys`);
-  }
-
   addPasswordKey(key: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/key/`, key);
+  }
+
+  getPassword(bunchOfKeysId: string, keyId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/key/password/${bunchOfKeysId}/${keyId}/`);
   }
 }
