@@ -16,7 +16,7 @@
             <div class="text-center">
               <hr>
             </div>
-            <div class="col-md-3 d-flex align-items-top">
+            <div class="col-md-3 d-flex align-items-center">
               <div class="card-body p-3 md-2 text-center">
                 <div *ngFor="let bunchOfKey of bunchOfKeys">
                   <h4>{{ bunchOfKey[0].name }}</h4>
@@ -54,7 +54,7 @@
                     </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createBunchOfKeyModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBunchOfKeyModal">
                   New Bunch of Keys
                 </button>
                 <!-- Modal Create Bunch of Key -->
@@ -89,7 +89,7 @@
             <div class="col-md-9 border-start d-flex align-items-top">
               <div class="card-body p-3 md-2 text-center">
                 <div class="d-flex justify-content-end mb-3">
-                  <button type="button" class="btn btn-dark mb-4 mx-4" data-bs-toggle="modal" data-bs-target="#addKeyModal">
+                  <button type="button" class="btn btn-primary mb-4 mx-4" data-bs-toggle="modal" data-bs-target="#addKeyModal">
                     New Key
                   </button>
                   <!-- Modal Create Key -->

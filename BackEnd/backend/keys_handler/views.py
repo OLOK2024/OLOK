@@ -62,48 +62,6 @@ class key_view(APIView):
         except Exception:
             return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @swagger_auto_schema(request_body=InfoKeySerializer)
-    def delete(self, request):
-
-        try:
-            data = request.data
-            serializer = InfoKeySerializer(data=data)
-
-            if serializer.is_valid():
-
-                bunchOfKeysId = data["bunchOfKeysId"]
-                keyId = data["keyId"]
-
-                # Ouverture d'une connexion à la base de données MongoDB
-                client = mongo.create_mongo_client()
-                db = client["olok"]
-
-                # Vérification de l'existence de la clé
-                collection = db["bunchOfKeys"]
-                bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
-
-                if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
-                    # Suppression de la clé
-                    collection = db["keys"]
-                    collection.delete_one({"_id": ObjectId(keyId)})
-
-                    # Suppression de la clé dans le porte trousseau
-                    collection = db["bunchOfKeys"]
-                    collection.update_one(
-                        {"_id": ObjectId(bunchOfKeysId)},
-                        {"$pull": {"keysIDs": ObjectId(keyId)}}
-                    )
-
-                    # Fermeture de la connexion à la base de données MongoDB
-                    client.close()
-
-                    # loggage de la suppression de la clé
-                    logger.info('del - ' + str(request.user.id) + ' - ' + keyId)
-
-                    return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception:
-            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class key_password_view(APIView):
 
@@ -301,5 +259,43 @@ class key_list_view(APIView):
             client.close()
 
             return Response(result, status=status.HTTP_200_OK)
+        except Exception:
+            return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class key_delete_view(APIView):
+
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request, bunchOfKeysId, keyId):
+
+        try:
+            # Ouverture d'une connexion à la base de données MongoDB
+            client = mongo.create_mongo_client()
+            db = client["olok"]
+
+            # Vérification de l'existence de la clé
+            collection = db["bunchOfKeys"]
+            bunchOfKeys = collection.find_one({"_id": ObjectId(bunchOfKeysId)})
+
+            if ObjectId(keyId) in bunchOfKeys.get("keysIDs", []):
+                # Suppression de la clé
+                collection = db["keys"]
+                collection.delete_one({"_id": ObjectId(keyId)})
+
+                # Suppression de la clé dans le porte trousseau
+                collection = db["bunchOfKeys"]
+                collection.update_one(
+                    {"_id": ObjectId(bunchOfKeysId)},
+                    {"$pull": {"keysIDs": ObjectId(keyId)}}
+                )
+
+                # Fermeture de la connexion à la base de données MongoDB
+                client.close()
+
+                # loggage de la suppression de la clé
+                logger.info('del - ' + str(request.user.id) + ' - ' + keyId)
+
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_404_NOT_FOUND)
         except Exception:
             return Response("Internal Error", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

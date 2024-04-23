@@ -17,4 +17,8 @@ export class KeyService {
   getPassword(bunchOfKeysId: string, keyId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/key/password/${bunchOfKeysId}/${keyId}/`);
   }
+
+  deleteKey(bunchOfKeysId: string, keyId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/key/del/${bunchOfKeysId}/${keyId}/`);
+  }
 }
